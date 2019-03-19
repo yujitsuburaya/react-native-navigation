@@ -6,6 +6,7 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup.MarginLayoutParams;
 
+import com.reactnativenavigation.parse.LayoutOptions;
 import com.reactnativenavigation.parse.Options;
 import com.reactnativenavigation.parse.OrientationOptions;
 import com.reactnativenavigation.parse.StatusBarOptions;
@@ -36,7 +37,7 @@ public class Presenter {
         Options withDefaultOptions = options.copy().withDefaultOptions(defaultOptions);
         applyOrientation(withDefaultOptions.layout.orientation);
         applyViewOptions(view, withDefaultOptions);
-        applyStatusBarOptions(view, withDefaultOptions.statusBar);
+        applyStatusBarOptions(view, withDefaultOptions);
     }
 
     public void applyRootOptions(View view, Options options) {
@@ -46,7 +47,7 @@ public class Presenter {
 
     public void onViewBroughtToFront(View view, Options options) {
         Options withDefaultOptions = options.copy().withDefaultOptions(defaultOptions);
-        applyStatusBarOptions(view, withDefaultOptions.statusBar);
+        applyStatusBarOptions(view, withDefaultOptions);
     }
 
     private void applyOrientation(OrientationOptions options) {
@@ -66,10 +67,19 @@ public class Presenter {
         }
     }
 
-    private void applyStatusBarOptions(View view, StatusBarOptions statusBar) {
-        setStatusBarBackgroundColor(statusBar);
-        setTextColorScheme(statusBar.textColorScheme);
-        setStatusBarVisible(view, statusBar.visible, statusBar.drawBehind);
+    private void applyStatusBarOptions(View view, Options options) {
+        setStatusBarBackgroundColor(options.statusBar);
+        setTextColorScheme(options.statusBar.textColorScheme);
+        setFitSystemWindow(view, options.layout);
+//        setStatusBarVisible(view, statusBar.visible, statusBar.drawBehind);
+    }
+
+    private void setFitSystemWindow(View view, LayoutOptions layout) {
+//        if (layout.fitSystemWindows.isFalse()) {
+//            view.setFitsSystemWindows(false);
+//        } else {
+//            view.setFitsSystemWindows(true);
+//        }
     }
 
     private void setStatusBarVisible(View view, Bool visible, Bool drawBehind) {

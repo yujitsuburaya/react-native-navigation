@@ -2,9 +2,9 @@ package com.reactnativenavigation.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.v4.widget.NestedScrollView;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.reactnativenavigation.interfaces.ScrollEventListener;
@@ -22,7 +22,7 @@ import java.util.List;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 @SuppressLint("ViewConstructor")
-public class ComponentLayout extends FrameLayout implements ReactComponent, TitleBarButtonController.OnClickListener {
+public class ComponentLayout extends NestedScrollView implements ReactComponent, TitleBarButtonController.OnClickListener {
 
     private IReactView reactView;
     private final OverlayTouchDelegate touchDelegate;

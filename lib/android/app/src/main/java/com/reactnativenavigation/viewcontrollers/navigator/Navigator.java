@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
+import android.support.design.widget.CoordinatorLayout;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
+import com.facebook.react.ReactInstanceManager;
 import com.reactnativenavigation.parse.Options;
 import com.reactnativenavigation.presentation.OverlayManager;
 import com.reactnativenavigation.presentation.Presenter;
@@ -21,8 +22,6 @@ import com.reactnativenavigation.viewcontrollers.ViewController;
 import com.reactnativenavigation.viewcontrollers.modal.ModalStack;
 import com.reactnativenavigation.viewcontrollers.stack.StackController;
 
-import com.facebook.react.ReactInstanceManager;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -33,10 +32,11 @@ public class Navigator extends ParentController {
     private final OverlayManager overlayManager;
     private final RootPresenter rootPresenter;
     private ViewController root;
-    private final FrameLayout rootLayout;
-    private final FrameLayout modalsLayout;
-    private final FrameLayout overlaysLayout;
+    private final CoordinatorLayout rootLayout;
+    private final CoordinatorLayout modalsLayout;
+    private final CoordinatorLayout overlaysLayout;
     private ViewGroup contentLayout;
+//    private CoordinatorLayout appRoot;
     private Options defaultOptions = new Options();
 
     @Override
@@ -50,7 +50,7 @@ public class Navigator extends ParentController {
         return defaultOptions;
     }
 
-    public FrameLayout getRootLayout() {
+    public CoordinatorLayout getRootLayout() {
         return rootLayout;
     }
 
@@ -58,8 +58,21 @@ public class Navigator extends ParentController {
         modalStack.setEventEmitter(eventEmitter);
     }
 
-    public void setContentLayout(ViewGroup contentLayout) {
+    public void setContentLayout(ViewGroup contentLayout, Activity activity) {
         this.contentLayout = contentLayout;
+//        appRoot = new CoordinatorLayout(contentLayout.getContext());
+//        appRoot.setBackgroundColor(Color.RED);
+//        contentLayout.addView(appRoot);
+//        activity.setContentView(appRoot);
+//        appRoot.setFitsSystemWindows(false);
+//        rootLayout.setFitsSystemWindows(false);
+
+//        rootLayout.setFitsSystemWindows(true);
+//        ViewCompat.setOnApplyWindowInsetsListener(rootLayout, (view, windowInsetsCompat) -> {
+//            Log.i("GUYCA", "rootLayout");
+//            return windowInsetsCompat;
+//        });
+
         contentLayout.addView(rootLayout);
         contentLayout.addView(modalsLayout);
         contentLayout.addView(overlaysLayout);
@@ -70,9 +83,9 @@ public class Navigator extends ParentController {
         this.modalStack = modalStack;
         this.overlayManager = overlayManager;
         this.rootPresenter = rootPresenter;
-        rootLayout = new FrameLayout(getActivity());
-        modalsLayout = new FrameLayout(getActivity());
-        overlaysLayout = new FrameLayout(getActivity());
+        rootLayout = new CoordinatorLayout(getActivity());
+        modalsLayout = new CoordinatorLayout(getActivity());
+        overlaysLayout = new CoordinatorLayout(getActivity());
     }
 
     public void bindViews() {
@@ -135,7 +148,7 @@ public class Navigator extends ParentController {
         rootPresenter.setRoot(root, defaultOptions, new CommandListenerAdapter(commandListener) {
             @Override
             public void onSuccess(String childId) {
-                if (removeSplashView) removePreviousContentView();
+//                if (removeSplashView) removePreviousContentView();
                 super.onSuccess(childId);
             }
         }, reactInstanceManager);
@@ -232,7 +245,7 @@ public class Navigator extends ParentController {
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
-    FrameLayout getModalsLayout() {
+    CoordinatorLayout getModalsLayout() {
         return modalsLayout;
     }
 }

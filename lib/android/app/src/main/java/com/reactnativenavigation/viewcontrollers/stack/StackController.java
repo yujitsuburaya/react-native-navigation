@@ -7,7 +7,6 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.reactnativenavigation.anim.NavigationAnimator;
 import com.reactnativenavigation.parse.Options;
@@ -17,6 +16,7 @@ import com.reactnativenavigation.react.Constants;
 import com.reactnativenavigation.utils.CollectionUtils;
 import com.reactnativenavigation.utils.CommandListener;
 import com.reactnativenavigation.utils.CommandListenerAdapter;
+import com.reactnativenavigation.utils.CoordinatorLayoutUtils;
 import com.reactnativenavigation.viewcontrollers.ChildControllersRegistry;
 import com.reactnativenavigation.viewcontrollers.IdStack;
 import com.reactnativenavigation.viewcontrollers.ParentController;
@@ -184,7 +184,7 @@ public class StackController extends ParentController<StackLayout> {
     }
 
     private void addChildToStack(ViewController child, View view, Options resolvedOptions) {
-        view.setLayoutParams(new RelativeLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        view.setLayoutParams(CoordinatorLayoutUtils.matchParentLP());
         child.setWaitForRender(resolvedOptions.animations.push.waitForRender);
         presenter.applyLayoutParamsOptions(resolvedOptions, view);
         if (size() == 1) presenter.applyInitialChildLayoutOptions(resolvedOptions);
@@ -251,7 +251,7 @@ public class StackController extends ParentController<StackLayout> {
         Options resolvedOptions = resolveCurrentOptions();
         ViewGroup appearingView = appearing.getView();
         if (appearingView.getLayoutParams() == null) {
-            appearingView.setLayoutParams(new RelativeLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+            appearingView.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));
             presenter.applyLayoutParamsOptions(resolvedOptions, appearingView);
         }
         if (appearingView.getParent() == null) {
@@ -350,7 +350,7 @@ public class StackController extends ParentController<StackLayout> {
     private void addInitialChild(StackLayout stackLayout) {
         if (isEmpty()) return;
         ViewGroup child = peek().getView();
-        child.setLayoutParams(new RelativeLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        child.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));
         Options options = resolveCurrentOptions();
         presenter.applyLayoutParamsOptions(options, child);
         presenter.applyInitialChildLayoutOptions(options);

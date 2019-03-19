@@ -41,7 +41,7 @@ public class NavigationActivity extends AppCompatActivity implements DefaultHard
     @Override
     public void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        navigator.setContentLayout(findViewById(android.R.id.content));
+        navigator.setContentLayout(findViewById(android.R.id.content), this);
     }
 
     @Override

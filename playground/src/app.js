@@ -35,6 +35,11 @@ function start() {
     Navigation.setRoot({
       root: {
         bottomTabs: {
+          options: {
+            layout: {
+              fitSystemWindows: false
+            },
+          },
           children: [
             {
               stack: {
@@ -46,6 +51,10 @@ function start() {
                   }
                 ],
                 options: {
+                  layout: {
+                    fitSystemWindows: true,
+                    componentBackgroundColor: 'red'
+                  },
                   bottomTab: {
                     text: 'Layouts',
                     icon: require('../img/layouts.png'),
