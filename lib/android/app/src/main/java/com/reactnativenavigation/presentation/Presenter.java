@@ -75,11 +75,11 @@ public class Presenter {
     }
 
     private void setFitSystemWindow(View view, LayoutOptions layout) {
-//        if (layout.fitSystemWindows.isFalse()) {
-//            view.setFitsSystemWindows(false);
-//        } else {
-//            view.setFitsSystemWindows(true);
-//        }
+        if (layout.fitSystemWindows.isFalseOrUndefined()) {
+            view.setFitsSystemWindows(false);
+        } else {
+            view.setFitsSystemWindows(true);
+        }
     }
 
     private void setStatusBarVisible(View view, Bool visible, Bool drawBehind) {

@@ -2,6 +2,7 @@ package com.reactnativenavigation.presentation;
 
 import android.graphics.Color;
 import android.support.annotation.IntRange;
+import android.support.v4.view.WindowInsetsCompat;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 
@@ -165,5 +166,14 @@ public class BottomTabsPresenter {
         if (options.elevation.hasValue()) {
             bottomTabs.setUseElevation(true, options.elevation.get().floatValue());
         }
+    }
+
+    public WindowInsetsCompat applyWindowInsets(ViewGroup view, WindowInsetsCompat insets) {
+//        for (ViewController tab : tabs) {
+//            MarginLayoutParams lp = (MarginLayoutParams) tab.getView().getLayoutParams();
+//            lp.bottomMargin = bottomTabs.getHeight();
+//            tab.getView().setLayoutParams(lp);
+//        }
+        return insets;
     }
 }

@@ -11,6 +11,8 @@ import com.reactnativenavigation.parse.Options;
 import com.reactnativenavigation.utils.CommandListener;
 import com.reactnativenavigation.viewcontrollers.ViewController;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
 public class ModalPresenter {
 
     private ViewGroup rootLayout;
@@ -41,7 +43,7 @@ public class ModalPresenter {
         }
         Options options = toAdd.resolveCurrentOptions(defaultOptions);
         toAdd.setWaitForRender(options.animations.showModal.waitForRender);
-        modalsLayout.addView(toAdd.getView());
+        modalsLayout.addView(toAdd.getView(), MATCH_PARENT, MATCH_PARENT);
         if (options.animations.showModal.enabled.isTrueOrUndefined()) {
             if (options.animations.showModal.waitForRender.isTrue()) {
                 toAdd.addOnAppearedListener(() -> animateShow(toAdd, toRemove, listener, options));

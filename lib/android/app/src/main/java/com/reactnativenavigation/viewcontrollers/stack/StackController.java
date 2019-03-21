@@ -350,7 +350,7 @@ public class StackController extends ParentController<StackLayout> {
     private void addInitialChild(StackLayout stackLayout) {
         if (isEmpty()) return;
         ViewGroup child = peek().getView();
-        child.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        child.setLayoutParams(CoordinatorLayoutUtils.matchParentLP());
         Options options = resolveCurrentOptions();
         presenter.applyLayoutParamsOptions(options, child);
         presenter.applyInitialChildLayoutOptions(options);

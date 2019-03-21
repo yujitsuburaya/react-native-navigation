@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RestrictTo;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.WindowInsetsCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.reactnativenavigation.viewcontrollers.ParentController;
 import com.reactnativenavigation.viewcontrollers.ViewController;
 import com.reactnativenavigation.views.BottomTabs;
 import com.reactnativenavigation.views.Component;
+import com.reactnativenavigation.views.bottomtabs.BottomTabsLayout;
 
 import java.util.Collection;
 import java.util.List;
@@ -52,7 +54,7 @@ public class BottomTabsController extends ParentController implements AHBottomNa
         this.tabsAttacher = tabsAttacher;
         this.presenter = bottomTabsPresenter;
         this.tabPresenter = bottomTabPresenter;
-        forEach(tabs, (tab) -> tab.setParentController(this));
+        forEach(tabs, tab -> tab.setParentController(this));
     }
 
     @Override
@@ -65,10 +67,11 @@ public class BottomTabsController extends ParentController implements AHBottomNa
     @NonNull
 	@Override
 	protected ViewGroup createView() {
-		CoordinatorLayout root = new CoordinatorLayout(getActivity());
-		root.setLayoutParams(CoordinatorLayoutUtils.matchParentLP());
+        BottomTabsLayout root = new BottomTabsLayout(getActivity());
+        root.setLayoutParams(CoordinatorLayoutUtils.matchParentLP());
+//        root.setFitsSystemWindows(true);
 
-		ViewCompat.setOnApplyWindowInsetsListener(root, (view, windowInsetsCompat) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(root, (view, windowInsetsCompat) -> {
             Log.i("GUYCA", "apply");
 		    return windowInsetsCompat;
         });
@@ -78,10 +81,12 @@ public class BottomTabsController extends ParentController implements AHBottomNa
         presenter.bindView(bottomTabs, this);
         tabPresenter.bindView(bottomTabs);
         bottomTabs.setOnTabSelectedListener(this);
+
         CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
-		lp.gravity = Gravity.BOTTOM;
+        lp.gravity = Gravity.BOTTOM;
 		root.addView(bottomTabs, lp);
-		bottomTabs.addItems(createTabs());
+
+        bottomTabs.addItems(createTabs());
         tabsAttacher.attach();
         return root;
 	}
@@ -89,6 +94,11 @@ public class BottomTabsController extends ParentController implements AHBottomNa
     @NonNull
     protected BottomTabs createBottomTabs() {
         return new BottomTabs(getActivity());
+    }
+
+    @Override
+    protected WindowInsetsCompat applyWindowInsets(WindowInsetsCompat insets) {
+        return presenter.applyWindowInsets(getView(), insets);
     }
 
     @Override

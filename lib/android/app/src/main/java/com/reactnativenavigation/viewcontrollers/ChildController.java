@@ -2,10 +2,13 @@ package com.reactnativenavigation.viewcontrollers;
 
 import android.app.Activity;
 import android.support.annotation.CallSuper;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.WindowInsetsCompat;
 import android.view.ViewGroup;
 
 import com.reactnativenavigation.parse.Options;
 import com.reactnativenavigation.presentation.Presenter;
+import com.reactnativenavigation.utils.WindowInsetsUtils;
 import com.reactnativenavigation.viewcontrollers.navigator.Navigator;
 import com.reactnativenavigation.views.Component;
 
@@ -21,6 +24,14 @@ public abstract class ChildController<T extends ViewGroup> extends ViewControlle
         super(activity, id, new NoOpYellowBoxDelegate(), initialOptions);
         this.presenter = presenter;
         this.childRegistry = childRegistry;
+    }
+
+    @Override
+    public T getView() {
+        if (view == null) {
+            ViewCompat.setOnApplyWindowInsetsListener(super.getView(), (view, insets) -> applyWindowInsets(insets));
+        }
+        return view;
     }
 
     @Override
@@ -74,5 +85,10 @@ public abstract class ChildController<T extends ViewGroup> extends ViewControlle
         return getParentController() == null &&
                 !(this instanceof Navigator) &&
                 getView().getParent() != null;
+    }
+
+    protected WindowInsetsCompat applyWindowInsets(WindowInsetsCompat insets) {
+        WindowInsetsUtils.log(insets);
+        return insets;
     }
 }

@@ -2,10 +2,9 @@ package com.reactnativenavigation.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v4.widget.NestedScrollView;
+import android.support.design.widget.CoordinatorLayout;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.reactnativenavigation.interfaces.ScrollEventListener;
 import com.reactnativenavigation.parse.Options;
@@ -22,7 +21,7 @@ import java.util.List;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 @SuppressLint("ViewConstructor")
-public class ComponentLayout extends NestedScrollView implements ReactComponent, TitleBarButtonController.OnClickListener {
+public class ComponentLayout extends CoordinatorLayout implements ReactComponent, TitleBarButtonController.OnClickListener {
 
     private IReactView reactView;
     private final OverlayTouchDelegate touchDelegate;
@@ -85,21 +84,17 @@ public class ComponentLayout extends NestedScrollView implements ReactComponent,
 
     @Override
     public void drawBehindTopBar() {
-        if (getLayoutParams() instanceof RelativeLayout.LayoutParams) {
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) getLayoutParams();
-            layoutParams.topMargin = 0;
-            setLayoutParams(layoutParams);
+        if (getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) getLayoutParams();
+            lp.topMargin = 0;
         }
     }
 
     @Override
     public void drawBelowTopBar(TopBar topBar) {
-        if (getLayoutParams() instanceof RelativeLayout.LayoutParams) {
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) getLayoutParams();
-            layoutParams.topMargin = ViewUtils.getHeight(topBar);
-            try {
-                setLayoutParams(layoutParams);
-            } catch (IllegalStateException ignored) { }
+        if (getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) getLayoutParams();
+            lp.topMargin = ViewUtils.getHeight(topBar);
         }
     }
 

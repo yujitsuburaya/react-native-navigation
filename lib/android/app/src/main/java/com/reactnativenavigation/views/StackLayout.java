@@ -18,20 +18,9 @@ public class StackLayout extends CoordinatorLayout implements Component {
     public StackLayout(Context context, TopBarController topBarController, String stackId) {
         super(context);
         this.stackId = stackId;
-//        setFitsSystemWindows(true);
-//        ViewCompat.setOnApplyWindowInsetsListener(this, (view, windowInsetsCompat) -> {
-//            Log.i("GUYCA", "Stack listener");
-//            return windowInsetsCompat;
-//        });
         createLayout(topBarController);
         if (BuildConfig.DEBUG) setContentDescription("StackLayout");
     }
-
-//    @Override
-//    public WindowInsets onApplyWindowInsets(WindowInsets insets) {
-//        Log.i("GUYCA", "Stack listener 2");
-//        return super.onApplyWindowInsets(insets);
-//    }
 
     private void createLayout(TopBarController topBarController) {
         addView(topBarController.createView(getContext(), this),
