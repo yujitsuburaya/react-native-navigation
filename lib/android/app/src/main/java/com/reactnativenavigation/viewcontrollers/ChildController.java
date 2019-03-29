@@ -2,12 +2,14 @@ package com.reactnativenavigation.viewcontrollers;
 
 import android.app.Activity;
 import android.support.annotation.CallSuper;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.WindowInsetsCompat;
 import android.view.ViewGroup;
 
 import com.reactnativenavigation.parse.Options;
 import com.reactnativenavigation.presentation.Presenter;
+import com.reactnativenavigation.utils.ViewUtils;
 import com.reactnativenavigation.utils.WindowInsetsUtils;
 import com.reactnativenavigation.viewcontrollers.navigator.Navigator;
 import com.reactnativenavigation.views.Component;
@@ -29,7 +31,9 @@ public abstract class ChildController<T extends ViewGroup> extends ViewControlle
     @Override
     public T getView() {
         if (view == null) {
-            ViewCompat.setOnApplyWindowInsetsListener(super.getView(), (view, insets) -> applyWindowInsets(insets));
+            super.getView();
+            presenter.onViewCreated(view, options);
+            ViewCompat.setOnApplyWindowInsetsListener(view, (view, insets) -> applyWindowInsets(insets));
         }
         return view;
     }
@@ -38,6 +42,11 @@ public abstract class ChildController<T extends ViewGroup> extends ViewControlle
     @CallSuper
     public void setDefaultOptions(Options defaultOptions) {
         presenter.setDefaultOptions(defaultOptions);
+    }
+
+    @Override
+    public void applyBottomPadding(int padding) {
+        ViewUtils.setPaddingBottom(view, padding);
     }
 
     @Override
@@ -53,7 +62,7 @@ public abstract class ChildController<T extends ViewGroup> extends ViewControlle
     }
 
     public void onViewBroughtToFront() {
-        presenter.onViewBroughtToFront(getView(), options);
+        presenter.onViewBroughtToFront(resolveCurrentOptions());
     }
 
     @Override
@@ -87,8 +96,31 @@ public abstract class ChildController<T extends ViewGroup> extends ViewControlle
                 getView().getParent() != null;
     }
 
-    protected WindowInsetsCompat applyWindowInsets(WindowInsetsCompat insets) {
+    private WindowInsetsCompat applyWindowInsets(WindowInsetsCompat insets) {
         WindowInsetsUtils.log(insets);
+        return presenter.applyWindowInsets(options, insets);
+    }
+
+    @Override
+    public WindowInsetsCompat onApplyWindowInsets(CoordinatorLayout coordinatorLayout, T child, WindowInsetsCompat insets) {
         return insets;
+    }
+
+    @Override
+    public boolean onMeasureChild(CoordinatorLayout parent, T child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        ViewController childController = findController(child);
+        if (childController == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+        Options options = childController.resolveCurrentOptions();
+        return presenter.measureChild(options,
+                parent,
+                child,
+                parentWidthMeasureSpec, widthUsed,
+                parentHeightMeasureSpec, heightUsed
+        );
+    }
+
+    @Override
+    public boolean onLayoutChild(CoordinatorLayout parent, T child, int layoutDirection) {
+        return presenter.layoutChild(options, parent, child, layoutDirection);
     }
 }

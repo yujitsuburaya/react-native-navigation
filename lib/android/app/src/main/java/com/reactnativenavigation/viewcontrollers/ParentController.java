@@ -6,6 +6,7 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.reactnativenavigation.parse.Options;
@@ -16,7 +17,7 @@ import com.reactnativenavigation.views.Component;
 
 import java.util.Collection;
 
-import static com.reactnativenavigation.utils.CollectionUtils.forEach;
+import static com.reactnativenavigation.utils.CollectionUtils.*;
 
 public abstract class ParentController<T extends ViewGroup> extends ChildController {
 
@@ -43,7 +44,8 @@ public abstract class ParentController<T extends ViewGroup> extends ChildControl
         return getCurrentChild()
                 .resolveCurrentOptions()
                 .copy()
-                .withDefaultOptions(initialOptions);
+//                .withDefaultOptions(initialOptions);
+                .withInitialOptions(initialOptions);
     }
 
     @Override
@@ -80,6 +82,20 @@ public abstract class ParentController<T extends ViewGroup> extends ChildControl
 
 		return null;
 	}
+
+    @Nullable
+    @Override
+    public ViewController findController(View child) {
+        ViewController fromSuper = super.findController(child);
+        if (fromSuper != null) return fromSuper;
+
+        for (ViewController childController : getChildControllers()) {
+            ViewController fromChild = childController.findController(child);
+            if (fromChild != null) return fromChild;
+        }
+
+        return null;
+    }
 
     @Override
     public boolean containsComponent(Component component) {

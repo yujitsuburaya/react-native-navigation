@@ -5,6 +5,7 @@ const { Platform } = require('react-native');
 const { setDefaultOptions } = require('./commons/Options')
 const testIDs = require('./testIDs');
 const Screens = require('./screens/Screens');
+const Color = require('./commons/Colors');
 
 if (Platform.OS === 'android') {
   alert = (title) => {
@@ -36,9 +37,12 @@ function start() {
       root: {
         bottomTabs: {
           options: {
-            layout: {
-              fitSystemWindows: false
+            statusBar: {
+              drawBehind: true
             },
+            _bottomTabs: {
+              tabsAttachMode: 'onSwitchToTab'
+            }
           },
           children: [
             {
@@ -46,14 +50,29 @@ function start() {
                 children: [
                   {
                     component: {
-                      name: 'Layouts'
+                      name: 'Layouts',
+                      options: {
+                        statusBar: {
+                          backgroundColor: '#ff000040',
+                          style: 'dark',
+                        },
+                        topBar: {
+                          elevation: 0,
+                          drawBehind: true,
+                          background: {
+                            color: 'transparent',
+                          }
+                        }
+                      }
                     }
                   }
                 ],
                 options: {
+                  statusBar: {
+                    drawBehind: true
+                  },
                   layout: {
-                    fitSystemWindows: true,
-                    componentBackgroundColor: 'red'
+                    backgroundColor: Color.background
                   },
                   bottomTab: {
                     text: 'Layouts',
@@ -73,6 +92,9 @@ function start() {
                   }
                 ],
                 options: {
+                  statusBar: {
+                    drawBehind: false
+                  },
                   topBar: {
                     title: {
                       text: 'Default Title'
@@ -91,7 +113,12 @@ function start() {
                 children: [
                   {
                     component: {
-                      name: 'Navigation'
+                      name: 'Navigation',
+                      options: {
+                        statusBar: {
+                          drawBehind: true
+                        }
+                      }
                     }
                   }
                 ]

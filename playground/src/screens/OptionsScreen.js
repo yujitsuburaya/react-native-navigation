@@ -22,6 +22,9 @@ const {
 class Options extends Component {
   static options() {
     return {
+      layout: {
+        _componentBackgroundColor: 'red'
+      },
       topBar: {
         visible: true,
         testID: TOP_BAR,
@@ -92,7 +95,24 @@ class Options extends Component {
     }
   });
 
-  push = () => Navigation.push(this, Screens.Pushed);
+  push = () => Navigation.push(this, {
+    component: {
+      name: Screens.Pushed,
+      options: {
+        statusBar: {
+          translucent: true,
+          drawBehind: true
+        },
+        topBar: {
+          drawBehind: true,
+          elevation: 0,
+          background: {
+            color: 'transparent'
+          }
+        }
+      }
+    }
+  });
 
   hideTopBarInDefaultOptions = () => {
     Navigation.setDefaultOptions({

@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.RestrictTo;
 import android.support.annotation.VisibleForTesting;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +18,7 @@ import com.reactnativenavigation.react.Constants;
 import com.reactnativenavigation.utils.CollectionUtils;
 import com.reactnativenavigation.utils.CommandListener;
 import com.reactnativenavigation.utils.CommandListenerAdapter;
+import com.reactnativenavigation.utils.CompatUtils;
 import com.reactnativenavigation.utils.CoordinatorLayoutUtils;
 import com.reactnativenavigation.viewcontrollers.ChildControllersRegistry;
 import com.reactnativenavigation.viewcontrollers.IdStack;
@@ -25,6 +28,7 @@ import com.reactnativenavigation.viewcontrollers.topbar.TopBarController;
 import com.reactnativenavigation.views.Component;
 import com.reactnativenavigation.views.ReactComponent;
 import com.reactnativenavigation.views.StackLayout;
+import com.reactnativenavigation.views.stack.StackBehaviour;
 import com.reactnativenavigation.views.topbar.TopBar;
 
 import java.util.Collection;
@@ -133,6 +137,12 @@ public class StackController extends ParentController<StackLayout> {
     }
 
     @Override
+    public void applyBottomPadding(int padding) {
+        presenter.applyBottomPadding(getCurrentChild(), padding);
+
+    }
+
+    @Override
     public void destroy() {
         topBarController.clear();
         super.destroy();
@@ -184,7 +194,10 @@ public class StackController extends ParentController<StackLayout> {
     }
 
     private void addChildToStack(ViewController child, View view, Options resolvedOptions) {
-        view.setLayoutParams(CoordinatorLayoutUtils.matchParentLP());
+        CoordinatorLayout.LayoutParams lp = CoordinatorLayoutUtils.matchParentLP();
+        lp.setBehavior(new StackBehaviour(this));
+        view.setLayoutParams(lp);
+        view.setTag("Child " + (size() - 1));
         child.setWaitForRender(resolvedOptions.animations.push.waitForRender);
         presenter.applyLayoutParamsOptions(resolvedOptions, view);
         if (size() == 1) presenter.applyInitialChildLayoutOptions(resolvedOptions);
@@ -350,7 +363,11 @@ public class StackController extends ParentController<StackLayout> {
     private void addInitialChild(StackLayout stackLayout) {
         if (isEmpty()) return;
         ViewGroup child = peek().getView();
-        child.setLayoutParams(CoordinatorLayoutUtils.matchParentLP());
+        child.setTag("child 0");
+        child.setId(CompatUtils.generateViewId());
+        CoordinatorLayout.LayoutParams lp = CoordinatorLayoutUtils.matchParentLP();
+        lp.setBehavior(new StackBehaviour(this));
+        child.setLayoutParams(lp);
         Options options = resolveCurrentOptions();
         presenter.applyLayoutParamsOptions(options, child);
         presenter.applyInitialChildLayoutOptions(options);
@@ -384,6 +401,31 @@ public class StackController extends ParentController<StackLayout> {
     @Override
     public void clearTopTabs() {
         topBarController.clearTopTabs();
+    }
+
+    @Override
+    public boolean onLayoutChild(CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
+        ViewController childController = findController(child);
+        if (childController == null) return super.onLayoutChild(parent, child, layoutDirection);
+        Options options = childController.resolveCurrentOptions();
+        return presenter.layoutChild(options, parent, child, layoutDirection);
+    }
+
+    @Override
+    public boolean onDependentViewChanged(CoordinatorLayout parent, ViewGroup child, View dependency) {
+        ViewController childController = findController(child);
+        if (childController == null) return super.onDependentViewChanged(parent, child, dependency);
+        Options options = childController.resolveCurrentOptions();
+        Log.i("StackController", "onDependentViewChanged " + child.getTag());
+        return presenter.onDependentViewChanged(options, parent, child, dependency);
+    }
+
+    @Override
+    public boolean onMeasureChild(CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        ViewController childController = findController(child);
+        if (childController == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+        Log.i("StackController", "onMeasureChild " + child.getTag());
+        return presenter.measureChild(childController.resolveCurrentOptions(), parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)

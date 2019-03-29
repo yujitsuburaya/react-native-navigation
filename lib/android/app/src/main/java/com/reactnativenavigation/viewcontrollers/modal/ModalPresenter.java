@@ -3,6 +3,7 @@ package com.reactnativenavigation.viewcontrollers.modal;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.view.ViewGroup;
 
 import com.reactnativenavigation.anim.ModalAnimator;
@@ -10,13 +11,14 @@ import com.reactnativenavigation.parse.ModalPresentationStyle;
 import com.reactnativenavigation.parse.Options;
 import com.reactnativenavigation.utils.CommandListener;
 import com.reactnativenavigation.viewcontrollers.ViewController;
+import com.reactnativenavigation.views.BehaviourDelegate;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public class ModalPresenter {
 
     private ViewGroup rootLayout;
-    private ViewGroup modalsLayout;
+    private CoordinatorLayout modalsLayout;
     private ModalAnimator animator;
     private Options defaultOptions = new Options();
 
@@ -28,7 +30,7 @@ public class ModalPresenter {
         this.rootLayout = rootLayout;
     }
 
-    void setModalsLayout(ViewGroup modalsLayout) {
+    void setModalsLayout(CoordinatorLayout modalsLayout) {
         this.modalsLayout = modalsLayout;
     }
 
@@ -41,9 +43,13 @@ public class ModalPresenter {
             listener.onError("Can not show modal before activity is created");
             return;
         }
+
         Options options = toAdd.resolveCurrentOptions(defaultOptions);
         toAdd.setWaitForRender(options.animations.showModal.waitForRender);
-        modalsLayout.addView(toAdd.getView(), MATCH_PARENT, MATCH_PARENT);
+        CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
+        lp.setBehavior(new BehaviourDelegate(toAdd));
+        modalsLayout.addView(toAdd.getView(), lp);
+
         if (options.animations.showModal.enabled.isTrueOrUndefined()) {
             if (options.animations.showModal.waitForRender.isTrue()) {
                 toAdd.addOnAppearedListener(() -> animateShow(toAdd, toRemove, listener, options));

@@ -56,8 +56,9 @@ public abstract class AttachMode {
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     public void attach(ViewController tab) {
         ViewGroup view = tab.getView();
+        view.setTag("tab " + tabs.indexOf(tab));
         CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
-        lp.setBehavior(new BottomTabsBehaviour());
+        lp.setBehavior(new BottomTabsBehaviour(tab.getParentController()));
         view.setLayoutParams(lp);
 
         presenter.applyLayoutParamsOptions(resolved, tabs.indexOf(tab));

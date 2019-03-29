@@ -16,9 +16,6 @@ const Screens = require('./Screens');
 class NavigationScreen  extends React.Component {
   static options() {
     return {
-      layout: {
-        fitSystemWindows: true
-      },
       topBar: {
         title: {
           text: 'Navigation'

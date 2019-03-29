@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.RestrictTo;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.WindowInsetsCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,14 +66,8 @@ public class BottomTabsController extends ParentController implements AHBottomNa
 	protected ViewGroup createView() {
         BottomTabsLayout root = new BottomTabsLayout(getActivity());
         root.setLayoutParams(CoordinatorLayoutUtils.matchParentLP());
-//        root.setFitsSystemWindows(true);
 
-        ViewCompat.setOnApplyWindowInsetsListener(root, (view, windowInsetsCompat) -> {
-            Log.i("GUYCA", "apply");
-		    return windowInsetsCompat;
-        });
-
-		bottomTabs = createBottomTabs();
+        bottomTabs = createBottomTabs();
         tabsAttacher.init(root, resolveCurrentOptions());
         presenter.bindView(bottomTabs, this);
         tabPresenter.bindView(bottomTabs);
@@ -94,11 +85,6 @@ public class BottomTabsController extends ParentController implements AHBottomNa
     @NonNull
     protected BottomTabs createBottomTabs() {
         return new BottomTabs(getActivity());
-    }
-
-    @Override
-    protected WindowInsetsCompat applyWindowInsets(WindowInsetsCompat insets) {
-        return presenter.applyWindowInsets(getView(), insets);
     }
 
     @Override
@@ -186,6 +172,13 @@ public class BottomTabsController extends ParentController implements AHBottomNa
 	public Collection<ViewController> getChildControllers() {
 		return tabs;
 	}
+
+    @Override
+    public boolean onMeasureChild(CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        ViewController controller = findController(child); // should resolve options of parent + this child -> add new api to ParentController
+        if (controller == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+        return presenter.onMeasureChild(controller.resolveCurrentOptions(), parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+    }
 
     @Override
     public void destroy() {

@@ -2,11 +2,16 @@ package com.reactnativenavigation.presentation;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.MeasureSpec;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.FrameLayout;
@@ -16,6 +21,7 @@ import com.reactnativenavigation.parse.Alignment;
 import com.reactnativenavigation.parse.AnimationsOptions;
 import com.reactnativenavigation.parse.Options;
 import com.reactnativenavigation.parse.OrientationOptions;
+import com.reactnativenavigation.parse.StatusBarOptions;
 import com.reactnativenavigation.parse.TopBarButtons;
 import com.reactnativenavigation.parse.TopBarOptions;
 import com.reactnativenavigation.parse.TopTabOptions;
@@ -26,6 +32,7 @@ import com.reactnativenavigation.utils.ButtonPresenter;
 import com.reactnativenavigation.utils.ImageLoader;
 import com.reactnativenavigation.utils.ObjectUtils;
 import com.reactnativenavigation.utils.UiUtils;
+import com.reactnativenavigation.utils.ViewUtils;
 import com.reactnativenavigation.viewcontrollers.IReactView;
 import com.reactnativenavigation.viewcontrollers.ReactViewCreator;
 import com.reactnativenavigation.viewcontrollers.TitleBarButtonController;
@@ -45,10 +52,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.reactnativenavigation.utils.CollectionUtils.filter;
-import static com.reactnativenavigation.utils.CollectionUtils.forEach;
-import static com.reactnativenavigation.utils.CollectionUtils.keyBy;
-import static com.reactnativenavigation.utils.CollectionUtils.merge;
+import static com.reactnativenavigation.utils.CollectionUtils.*;
 import static com.reactnativenavigation.utils.ObjectUtils.perform;
 
 public class StackPresenter {
@@ -329,6 +333,102 @@ public class StackPresenter {
         }
     }
 
+    public boolean layoutChild(Options options, CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
+        Log.d("StackPresenter", "layoutChild " + child.getClass().getSimpleName());
+        Point pLoc = ViewUtils.getLocationOnScreen(parent);
+        Point cLoc = ViewUtils.getLocationOnScreen(child);
+//        if (options.topBar.drawBehind.isFalseOrUndefined() && child.getTop() != topBar.getBottom()) {
+////            parent.onLayoutChild(child, layoutDirection);
+//            int offset = Math.abs(child.getTop() - topBar.getBottom());
+//            Log.w("StackPresenter", "layoutChild: " + child.getTag() + " [" + offset + "]");
+//            child.offsetTopAndBottom(offset);
+//            return true;
+//        }
+//        if (statusBar.drawBehind.isFalseOrUndefined() && loc.y == 0) {
+////            parent.onLayoutChild(child, layoutDirection);
+////            child.offsetTopAndBottom(63);
+////            return true;
+//        }
+//
+////        Options withDefault = options.copy().withDefaultOptions(defaultOptions);
+////        if (parent.getFitsSystemWindows() && withDefault.topBar.drawBehind.isTrue()) {
+////            topBar.setTop(63);
+////        } else {
+////            topBar.setTop(0);
+////        }
+//////        parent.onLayoutChild(child, layoutDirection);
+        return false;
+    }
+
+    public boolean onDependentViewChanged(Options options, CoordinatorLayout parent, ViewGroup child, View dependency) {
+//        Log.d("StackPresenter", "onDependentViewChanged " + child.getTag());
+        Options withDefault = options.copy().withDefaultOptions(defaultOptions);
+        StatusBarOptions statusBar = withDefault.statusBar;
+        TopBarOptions topBarOptions = withDefault.topBar;
+        Point loc = ViewUtils.getLocationOnScreen(parent);
+
+        if (statusBar.drawBehind.isTrue() && statusBar.visible.isTrueOrUndefined() && loc.y == 0) {
+            topBar.setY(63);
+        } else {
+            topBar.setY(loc.y == 0 ? 63 : 0);
+        }
+
+        if (statusBar.drawBehind.isFalseOrUndefined() && topBarOptions.drawBehind.isFalseOrUndefined()) {
+            MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
+            if (loc.y == 0) {
+                Log.d("StackPresenter", "onDependentViewChanged " + child.getTag());
+                child.setY(147 + 63);
+            } else {
+                child.setY(147);
+            }
+        }
+
+        return true;
+    }
+
+    public boolean measureChild(Options childOptions, CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+//        Point loc = ViewUtils.getLocationOnScreen(parent);
+//        if (child.getTag().equals("child 0"))
+//        Log.i("StackPresenter", "measureChild loc: " + loc.y + " " +
+//                                "cloc: " + ViewUtils.getLocationOnScreen(child).y + " " +
+//                                "pHeight: " + parent.getHeight() + " " +
+//                                "cHeight: " + child.getHeight());
+//        if (childOptions.statusBar.drawBehind.isFalseOrUndefined()) {
+//
+//        }
+
+//        if (childOptions.statusBar.drawBehind.isTrue()) {
+//            int height = MeasureSpec.getSize(parentHeightMeasureSpec) + 63;
+//            parent.onMeasureChild(child,
+//                    parentWidthMeasureSpec, widthUsed,
+//                    MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY), heightUsed);
+//            return true;
+//        }
+//        return false;
+
+        Log.i("BottomTabsController", "onMeasureChild child: " + child.getTag());
+        int heightMode = MeasureSpec.getMode(parentHeightMeasureSpec);
+        int height = MeasureSpec.getSize(parentHeightMeasureSpec);
+        int childHeight = parent.getHeight();
+
+//        if (heightMode == MeasureSpec.UNSPECIFIED || height > childHeight) {
+//            if (childOptions.bottomTabsOptions.drawBehind.isFalseOrUndefined()) {
+//                if (childOptions.statusBar.drawBehind.isFalseOrUndefined()) {
+//                    Point loc = ViewUtils.getLocationOnScreen(parent);
+//                    if (loc.y == 0) {
+//                        childHeight -= 63;
+//                    }
+//                }
+//                parent.onMeasureChild(child,
+//                        parentWidthMeasureSpec, widthUsed,
+//                        MeasureSpec.makeMeasureSpec(childHeight, MeasureSpec.EXACTLY), heightUsed);
+//                return true;
+//            }
+//        }
+
+        return false;
+    }
+
     public void mergeChildOptions(Options toMerge, Options resolvedOptions, Component child) {
         TopBarOptions topBar = toMerge.copy().mergeWith(resolvedOptions).withDefaultOptions(defaultOptions).topBar;
         mergeOrientation(toMerge.layout.orientation);
@@ -496,5 +596,11 @@ public class StackPresenter {
 
     private List<TitleBarButtonController> getLeftButtons(Component child) {
         return componentLeftButtons.containsKey(child) ? new ArrayList<>(componentLeftButtons.get(child).values()) : null;
+    }
+
+    public void applyBottomPadding(ViewController child, int padding) {
+        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) child.getView().getLayoutParams();
+        ViewGroup view = child.getView();
+        lp.bottomMargin = padding;
     }
 }

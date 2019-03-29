@@ -3,6 +3,7 @@ package com.reactnativenavigation.views;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
+import android.view.View;
 
 import com.reactnativenavigation.BuildConfig;
 import com.reactnativenavigation.utils.UiUtils;
@@ -23,10 +24,9 @@ public class StackLayout extends CoordinatorLayout implements Component {
     }
 
     private void createLayout(TopBarController topBarController) {
-        addView(topBarController.createView(getContext(), this),
-                MATCH_PARENT,
-                UiUtils.getTopBarHeight(getContext())
-        );
+        View topBar = topBarController.createView(getContext(), this);
+        CoordinatorLayout.LayoutParams lp = new LayoutParams(MATCH_PARENT, UiUtils.getTopBarHeight(getContext()));
+        addView(topBar, lp);
     }
 
     public String getStackId() {

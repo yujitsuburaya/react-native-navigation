@@ -106,6 +106,22 @@ public class Options {
         return this;
     }
 
+    public Options withInitialOptions(final Options initialOptions) {
+        topBar.mergeWithDefault(initialOptions.topBar);
+        topTabOptions.mergeWithDefault(initialOptions.topTabOptions);
+        topTabs.mergeWithDefault(initialOptions.topTabs);
+        bottomTabOptions.mergeWithDefault(initialOptions.bottomTabOptions);
+        bottomTabsOptions.mergeWithDefault(initialOptions.bottomTabsOptions);
+        fabOptions.mergeWithDefault(initialOptions.fabOptions);
+        animations.mergeWithDefault(initialOptions.animations);
+        sideMenuRootOptions.mergeWithDefault(initialOptions.sideMenuRootOptions);
+        modal.mergeWithDefault(initialOptions.modal);
+        statusBar.mergeWithDefault(initialOptions.statusBar);
+        layout.mergeWithInitial(initialOptions.layout);
+        transitions.mergeWithDefault(initialOptions.transitions);
+        return this;
+    }
+
     public Options clearTopBarOptions() {
         topBar = new TopBarOptions();
         return this;

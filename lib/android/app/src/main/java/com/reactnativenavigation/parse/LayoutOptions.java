@@ -54,4 +54,13 @@ public class LayoutOptions {
         if (!direction.hasValue()) direction = defaultOptions.direction;
         if (!fitSystemWindows.hasValue()) fitSystemWindows = defaultOptions.fitSystemWindows;
     }
+
+    public void mergeWithInitial(LayoutOptions initialOptions) {
+        if (!backgroundColor.hasValue()) backgroundColor = initialOptions.backgroundColor;
+        if (!componentBackgroundColor.hasValue()) componentBackgroundColor = initialOptions.componentBackgroundColor;
+        if (!topMargin.hasValue()) topMargin = initialOptions.topMargin;
+        if (!orientation.hasValue()) orientation = initialOptions.orientation;
+        if (!direction.hasValue()) direction = initialOptions.direction;
+        fitSystemWindows = initialOptions.fitSystemWindows;
+    }
 }

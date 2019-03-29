@@ -1,7 +1,9 @@
 package com.reactnativenavigation.viewcontrollers.externalcomponent;
 
 import android.app.Activity;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.WindowInsetsCompat;
 
 import com.facebook.react.ReactInstanceManager;
 import com.reactnativenavigation.parse.ExternalComponent;
