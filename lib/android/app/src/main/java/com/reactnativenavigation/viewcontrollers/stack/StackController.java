@@ -6,7 +6,6 @@ import android.support.annotation.RestrictTo;
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -134,11 +133,6 @@ public class StackController extends ParentController<StackLayout> {
                         child
                 )
         );
-    }
-
-    @Override
-    public void applyBottomPadding(int padding) {
-        presenter.applyBottomPadding(getCurrentChild(), padding);
     }
 
     @Override
@@ -407,6 +401,13 @@ public class StackController extends ParentController<StackLayout> {
         ViewController controller = findController(child);
         if (controller == null) return super.onLayoutChild(parent, child, layoutDirection);
         return presenter.layoutChild(controller.resolveCurrentOptions(), parent, child, layoutDirection);
+    }
+
+    @Override
+    public boolean onMeasureChild(CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        ViewController controller = findController(child);
+        if (controller == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+        return presenter.onMeasureChild(parent, controller, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
     }
 
     @Override

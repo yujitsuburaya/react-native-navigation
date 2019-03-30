@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
@@ -501,12 +502,6 @@ public class StackPresenter {
         return componentLeftButtons.containsKey(child) ? new ArrayList<>(componentLeftButtons.get(child).values()) : null;
     }
 
-    public void applyBottomPadding(ViewController child, int padding) {
-        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) child.getView().getLayoutParams();
-        ViewGroup view = child.getView();
-//        lp.bottomMargin = padding;
-    }
-
     public boolean layoutChild(Options options, CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
         parent.onLayoutChild(child, layoutDirection);
         return true;
@@ -526,7 +521,6 @@ public class StackPresenter {
 
         if (statusBar.drawBehind.isFalseOrUndefined() && topBarOptions.drawBehind.isFalseOrUndefined()) {
             if (loc.y == 0) {
-                Log.d("StackPresenter", "onDependentViewChanged " + child.getTag());
                 child.setY(147 + 63);
             } else {
                 child.setY(147);
@@ -538,5 +532,15 @@ public class StackPresenter {
 
     public void offsetTopAndBottom(int offset) {
         topBar.offsetTopAndBottom(offset);
+    }
+
+    public boolean onMeasureChild(CoordinatorLayout parent, ViewController child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        int height = MeasureSpec.getSize(parentHeightMeasureSpec);
+        Point loc = ViewUtils.getLocationOnScreen(parent);
+        Log.i("onMeasureChild", "id: " + child.getId() + " " +
+                                "h: " + height + " " +
+                                "y: " + loc.y);
+//        parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+        return false;
     }
 }
