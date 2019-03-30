@@ -6,6 +6,7 @@ import android.support.annotation.RestrictTo;
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -413,6 +414,12 @@ public class StackController extends ParentController<StackLayout> {
         ViewController controller = findController(child);
         if (controller == null) return super.onDependentViewChanged(parent, child, dependency);
         return presenter.onDependentViewChanged(controller.resolveCurrentOptions(), parent, child, dependency);
+    }
+
+    @Override
+    public void offsetTopAndBottom(int offset) {
+        super.offsetTopAndBottom(offset);
+        presenter.offsetTopAndBottom(offset);
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)

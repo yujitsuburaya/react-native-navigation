@@ -184,8 +184,9 @@ public class BottomTabsPresenter {
         return false;
     }
 
-    public boolean onLayoutChild(Options options, CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
-        parent.onLayoutChild(child, layoutDirection);
+    public boolean onLayoutChild(CoordinatorLayout parent, ViewController child, int layoutDirection) {
+        parent.onLayoutChild(child.getView(), layoutDirection);
+        Options options = child.resolveCurrentOptions();
         if (options.statusBar.drawBehind.isTrue()) {
             child.offsetTopAndBottom(0);
         } else {

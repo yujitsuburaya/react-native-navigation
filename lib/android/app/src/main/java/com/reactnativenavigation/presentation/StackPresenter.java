@@ -518,10 +518,10 @@ public class StackPresenter {
         TopBarOptions topBarOptions = withDefault.topBar;
         Point loc = ViewUtils.getLocationOnScreen(parent);
 
-        if (statusBar.drawBehind.isTrue() && statusBar.visible.isTrueOrUndefined() && loc.y == 0) {
+        if (loc.y == 0) {
             topBar.setY(63);
         } else {
-            topBar.setY(loc.y == 0 ? 63 : 0);
+            topBar.setY(0);
         }
 
         if (statusBar.drawBehind.isFalseOrUndefined() && topBarOptions.drawBehind.isFalseOrUndefined()) {
@@ -534,5 +534,9 @@ public class StackPresenter {
         }
 
         return true;
+    }
+
+    public void offsetTopAndBottom(int offset) {
+        topBar.offsetTopAndBottom(offset);
     }
 }

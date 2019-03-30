@@ -198,7 +198,7 @@ public class BottomTabsController extends ParentController implements AHBottomNa
     public boolean onLayoutChild(CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
         ViewController childController = findController(child);
         if (childController == null) return super.onLayoutChild(parent, child, layoutDirection);
-        return presenter.onLayoutChild(childController.resolveCurrentOptions(), parent, child, layoutDirection);
+        return presenter.onLayoutChild(parent, childController, layoutDirection);
     }
 
     @NonNull

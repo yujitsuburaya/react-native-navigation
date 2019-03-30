@@ -42,6 +42,10 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
     private boolean isFirstLayout = true;
     private Bool waitForRender = new NullBool();
 
+    public void offsetTopAndBottom(int offset) {
+        if (view != null) view.offsetTopAndBottom(offset);
+    }
+
     public interface ViewVisibilityListener {
         /**
          * @return true if the event is consumed, false otherwise
