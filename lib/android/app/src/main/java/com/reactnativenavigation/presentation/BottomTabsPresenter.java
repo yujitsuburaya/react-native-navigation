@@ -3,7 +3,6 @@ package com.reactnativenavigation.presentation;
 import android.graphics.Color;
 import android.support.annotation.IntRange;
 import android.support.design.widget.CoordinatorLayout;
-import android.util.Log;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
@@ -117,13 +116,9 @@ public class BottomTabsPresenter {
         }
         if (options.visible.isTrueOrUndefined() && options.drawBehind.isFalseOrUndefined()) {
             if (bottomTabs.getHeight() == 0) {
-                UiUtils.runOnPreDrawOnce(bottomTabs, () -> lp.bottomMargin = bottomTabs.getHeight());
-//                UiUtils.runOnPreDrawOnce(bottomTabs, () -> ViewUtils.setPaddingBottom(tab, bottomTabs.getHeight()));
-//                UiUtils.runOnPreDrawOnce(bottomTabs, () -> tabs.get(tabIndex).applyBottomPadding(bottomTabs.getHeight()));
+//                UiUtils.runOnPreDrawOnce(bottomTabs, () -> lp.bottomMargin = bottomTabs.getHeight());
             } else {
-                lp.bottomMargin = bottomTabs.getHeight();
-//                ViewUtils.setPaddingBottom(tab, bottomTabs.getHeight());
-//                tabs.get(tabIndex).applyBottomPadding(bottomTabs.getHeight());
+//                lp.bottomMargin = bottomTabs.getHeight();
             }
         }
     }
@@ -175,29 +170,27 @@ public class BottomTabsPresenter {
     }
 
     public boolean onMeasureChild(Options options, CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-        int heightMode = MeasureSpec.getMode(parentHeightMeasureSpec);
-        int height = MeasureSpec.getSize(parentHeightMeasureSpec);
-        int childHeight = parent.getHeight() - bottomTabs.getHeight();
-
-//        if (heightMode == MeasureSpec.UNSPECIFIED || height > childHeight) {
-//            if (options.bottomTabsOptions.drawBehind.isFalseOrUndefined()) {
-//                if (options.statusBar.drawBehind.isFalseOrUndefined()) {
-////                    Point pLoc = ViewUtils.getLocationOnScreen(parent);
-////                    Point cLoc = ViewUtils.getLocationOnScreen(child);
-////                    if (cLoc.y == 63 && pLoc.y == 0) {
-//                        childHeight -= 63;
-////                    }
-//                }
-//                if (childHeight <= 0) return false;
-//                Log.i("BottomTabsPresenter", "onMeasureChild child: " + child.getTag() + " height: " + childHeight);
-//                parent.onMeasureChild(child,
-//                        parentWidthMeasureSpec, widthUsed,
-//                        MeasureSpec.makeMeasureSpec(childHeight, MeasureSpec.EXACTLY), heightUsed);
-//                return true;
-//            }
-//        }
-        Log.d("BottomTabsPresenter", "onMeasureChild child: " + child.getTag() + " height: " + childHeight);
+        if (options.bottomTabsOptions.drawBehind.isFalseOrUndefined()) {
+            int height = MeasureSpec.getSize(parentHeightMeasureSpec);
+            height -= bottomTabs.getHeight();
+            if (options.statusBar.drawBehind.isFalseOrUndefined()) {
+                height -= 63;
+            }
+            int spec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
+            parent.onMeasureChild(child, parentWidthMeasureSpec, widthUsed, spec, heightUsed);
+            return true;
+        }
 
         return false;
+    }
+
+    public boolean onLayoutChild(Options options, CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
+        parent.onLayoutChild(child, layoutDirection);
+        if (options.statusBar.drawBehind.isTrue()) {
+            child.offsetTopAndBottom(0);
+        } else {
+            child.offsetTopAndBottom(63);
+        }
+        return true;
     }
 }

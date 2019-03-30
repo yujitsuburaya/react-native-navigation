@@ -1,14 +1,12 @@
 package com.reactnativenavigation.viewcontrollers;
 
 import android.app.Activity;
-import android.graphics.Rect;
 import android.support.annotation.CallSuper;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.WindowInsetsCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
@@ -24,8 +22,8 @@ import com.reactnativenavigation.utils.StringUtils;
 import com.reactnativenavigation.utils.UiThread;
 import com.reactnativenavigation.utils.UiUtils;
 import com.reactnativenavigation.viewcontrollers.stack.StackController;
-import com.reactnativenavigation.views.Component;
 import com.reactnativenavigation.views.BehaviourAdapter;
+import com.reactnativenavigation.views.Component;
 import com.reactnativenavigation.views.Renderable;
 import com.reactnativenavigation.views.element.Element;
 
@@ -327,22 +325,12 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
     }
 
     @Override
-    public WindowInsetsCompat onApplyWindowInsets(CoordinatorLayout coordinatorLayout, T child, WindowInsetsCompat insets) {
-        return insets;
-    }
-
-    @Override
     public boolean onMeasureChild(CoordinatorLayout parent, T child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
         return false;
     }
 
     @Override
     public boolean onLayoutChild(CoordinatorLayout parent, T child, int layoutDirection) {
-        return false;
-    }
-
-    @Override
-    public boolean getInsetDodgeRect(@NonNull CoordinatorLayout parent, @NonNull T child, @NonNull Rect rect) {
         return false;
     }
 

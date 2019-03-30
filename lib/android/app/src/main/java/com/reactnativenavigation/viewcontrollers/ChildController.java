@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import com.reactnativenavigation.parse.Options;
 import com.reactnativenavigation.presentation.Presenter;
 import com.reactnativenavigation.utils.ViewUtils;
-import com.reactnativenavigation.utils.WindowInsetsUtils;
 import com.reactnativenavigation.viewcontrollers.navigator.Navigator;
 import com.reactnativenavigation.views.Component;
 
@@ -97,26 +96,7 @@ public abstract class ChildController<T extends ViewGroup> extends ViewControlle
     }
 
     private WindowInsetsCompat applyWindowInsets(WindowInsetsCompat insets) {
-        WindowInsetsUtils.log(insets);
-        return presenter.applyWindowInsets(options, insets);
-    }
-
-    @Override
-    public WindowInsetsCompat onApplyWindowInsets(CoordinatorLayout coordinatorLayout, T child, WindowInsetsCompat insets) {
         return insets;
-    }
-
-    @Override
-    public boolean onMeasureChild(CoordinatorLayout parent, T child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-        ViewController childController = findController(child);
-        if (childController == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
-        Options options = childController.resolveCurrentOptions();
-        return presenter.measureChild(options,
-                parent,
-                child,
-                parentWidthMeasureSpec, widthUsed,
-                parentHeightMeasureSpec, heightUsed
-        );
     }
 
     @Override

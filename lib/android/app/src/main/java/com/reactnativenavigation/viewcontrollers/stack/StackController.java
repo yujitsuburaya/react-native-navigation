@@ -139,7 +139,6 @@ public class StackController extends ParentController<StackLayout> {
     @Override
     public void applyBottomPadding(int padding) {
         presenter.applyBottomPadding(getCurrentChild(), padding);
-
     }
 
     @Override
@@ -418,14 +417,6 @@ public class StackController extends ParentController<StackLayout> {
         Options options = childController.resolveCurrentOptions();
         Log.i("StackController", "onDependentViewChanged " + child.getTag());
         return presenter.onDependentViewChanged(options, parent, child, dependency);
-    }
-
-    @Override
-    public boolean onMeasureChild(CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-        ViewController childController = findController(child);
-        if (childController == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
-        Log.i("StackController", "onMeasureChild " + child.getTag());
-        return presenter.measureChild(childController.resolveCurrentOptions(), parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)

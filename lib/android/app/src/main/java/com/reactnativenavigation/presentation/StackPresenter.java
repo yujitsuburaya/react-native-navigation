@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
@@ -337,6 +336,7 @@ public class StackPresenter {
         Log.d("StackPresenter", "layoutChild " + child.getClass().getSimpleName());
         Point pLoc = ViewUtils.getLocationOnScreen(parent);
         Point cLoc = ViewUtils.getLocationOnScreen(child);
+        // region playground
 //        if (options.topBar.drawBehind.isFalseOrUndefined() && child.getTop() != topBar.getBottom()) {
 ////            parent.onLayoutChild(child, layoutDirection);
 //            int offset = Math.abs(child.getTop() - topBar.getBottom());
@@ -357,6 +357,7 @@ public class StackPresenter {
 ////            topBar.setTop(0);
 ////        }
 //////        parent.onLayoutChild(child, layoutDirection);
+        // endregion playground
         return false;
     }
 
@@ -374,7 +375,6 @@ public class StackPresenter {
         }
 
         if (statusBar.drawBehind.isFalseOrUndefined() && topBarOptions.drawBehind.isFalseOrUndefined()) {
-            MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
             if (loc.y == 0) {
                 Log.d("StackPresenter", "onDependentViewChanged " + child.getTag());
                 child.setY(147 + 63);
@@ -384,49 +384,6 @@ public class StackPresenter {
         }
 
         return true;
-    }
-
-    public boolean measureChild(Options childOptions, CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-//        Point loc = ViewUtils.getLocationOnScreen(parent);
-//        if (child.getTag().equals("child 0"))
-//        Log.i("StackPresenter", "measureChild loc: " + loc.y + " " +
-//                                "cloc: " + ViewUtils.getLocationOnScreen(child).y + " " +
-//                                "pHeight: " + parent.getHeight() + " " +
-//                                "cHeight: " + child.getHeight());
-//        if (childOptions.statusBar.drawBehind.isFalseOrUndefined()) {
-//
-//        }
-
-//        if (childOptions.statusBar.drawBehind.isTrue()) {
-//            int height = MeasureSpec.getSize(parentHeightMeasureSpec) + 63;
-//            parent.onMeasureChild(child,
-//                    parentWidthMeasureSpec, widthUsed,
-//                    MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY), heightUsed);
-//            return true;
-//        }
-//        return false;
-
-        Log.i("BottomTabsController", "onMeasureChild child: " + child.getTag());
-        int heightMode = MeasureSpec.getMode(parentHeightMeasureSpec);
-        int height = MeasureSpec.getSize(parentHeightMeasureSpec);
-        int childHeight = parent.getHeight();
-
-//        if (heightMode == MeasureSpec.UNSPECIFIED || height > childHeight) {
-//            if (childOptions.bottomTabsOptions.drawBehind.isFalseOrUndefined()) {
-//                if (childOptions.statusBar.drawBehind.isFalseOrUndefined()) {
-//                    Point loc = ViewUtils.getLocationOnScreen(parent);
-//                    if (loc.y == 0) {
-//                        childHeight -= 63;
-//                    }
-//                }
-//                parent.onMeasureChild(child,
-//                        parentWidthMeasureSpec, widthUsed,
-//                        MeasureSpec.makeMeasureSpec(childHeight, MeasureSpec.EXACTLY), heightUsed);
-//                return true;
-//            }
-//        }
-
-        return false;
     }
 
     public void mergeChildOptions(Options toMerge, Options resolvedOptions, Component child) {
@@ -601,6 +558,6 @@ public class StackPresenter {
     public void applyBottomPadding(ViewController child, int padding) {
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) child.getView().getLayoutParams();
         ViewGroup view = child.getView();
-        lp.bottomMargin = padding;
+//        lp.bottomMargin = padding;
     }
 }

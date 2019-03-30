@@ -58,19 +58,8 @@ public class Navigator extends ParentController {
         modalStack.setEventEmitter(eventEmitter);
     }
 
-    public void setContentLayout(ViewGroup contentLayout, Activity activity) {
+    public void setContentLayout(ViewGroup contentLayout) {
         this.contentLayout = contentLayout;
-//        appRoot = new CoordinatorLayout(contentLayout.getContext());
-//        appRoot.addView(rootLayout, MATCH_PARENT, MATCH_PARENT);
-//        appRoot.addView(modalsLayout, MATCH_PARENT, MATCH_PARENT);
-//        appRoot.addView(overlaysLayout, MATCH_PARENT, MATCH_PARENT);
-//        activity.setContentView(appRoot);
-//        appRoot.setFitsSystemWindows(false);
-//        rootLayout.setFitsSystemWindows(false);
-
-//        rootLayout.setFitsSystemWindows(true);
-//        appRoot.setFitsSystemWindows(true);
-
         contentLayout.addView(rootLayout);
         contentLayout.addView(modalsLayout);
         contentLayout.addView(overlaysLayout);
@@ -140,13 +129,13 @@ public class Navigator extends ParentController {
 
     public void setRoot(final ViewController viewController, CommandListener commandListener, ReactInstanceManager reactInstanceManager) {
         destroyRoot();
-//        final boolean removeSplashView = isRootNotCreated();
+        final boolean removeSplashView = isRootNotCreated();
         if (isRootNotCreated()) getView();
         root = viewController;
         rootPresenter.setRoot(root, defaultOptions, new CommandListenerAdapter(commandListener) {
             @Override
             public void onSuccess(String childId) {
-//                if (removeSplashView) removePreviousContentView();
+                if (removeSplashView) removePreviousContentView();
                 super.onSuccess(childId);
             }
         }, reactInstanceManager);

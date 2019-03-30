@@ -174,13 +174,6 @@ public class BottomTabsController extends ParentController implements AHBottomNa
 	}
 
     @Override
-    public boolean onMeasureChild(CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-        ViewController controller = findController(child); // should resolve options of parent + this child -> add new api to ParentController
-        if (controller == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
-        return presenter.onMeasureChild(controller.resolveCurrentOptions(), parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
-    }
-
-    @Override
     public void destroy() {
         tabsAttacher.destroy();
         super.destroy();
@@ -192,6 +185,20 @@ public class BottomTabsController extends ParentController implements AHBottomNa
         getCurrentView().setVisibility(View.INVISIBLE);
         bottomTabs.setCurrentItem(newIndex, false);
         getCurrentView().setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onMeasureChild(CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        ViewController childController = findController(child);
+        if (childController == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+        return presenter.onMeasureChild(childController.resolveCurrentOptions(), parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+    }
+
+    @Override
+    public boolean onLayoutChild(CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
+        ViewController childController = findController(child);
+        if (childController == null) return super.onLayoutChild(parent, child, layoutDirection);
+        return presenter.onLayoutChild(childController.resolveCurrentOptions(), parent, child, layoutDirection);
     }
 
     @NonNull

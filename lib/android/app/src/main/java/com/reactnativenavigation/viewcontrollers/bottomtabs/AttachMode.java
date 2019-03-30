@@ -61,7 +61,7 @@ public abstract class AttachMode {
         lp.setBehavior(new BottomTabsBehaviour(tab.getParentController()));
         view.setLayoutParams(lp);
 
-        presenter.applyLayoutParamsOptions(resolved, tabs.indexOf(tab));
+//        presenter.applyLayoutParamsOptions(resolved, tabs.indexOf(tab));
         view.setVisibility(tab == initialTab ? View.VISIBLE : View.INVISIBLE);
 
         parent.addView(view);

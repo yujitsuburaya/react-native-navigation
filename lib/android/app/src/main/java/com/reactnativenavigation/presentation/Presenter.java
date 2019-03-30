@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.WindowInsetsCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -189,31 +188,6 @@ public class Presenter {
         }
     }
 
-    public WindowInsetsCompat applyWindowInsets(Options options, WindowInsetsCompat insets) {
-//        if (options.layout.fitSystemWindows.isTrue()) {
-//            return insets.consumeSystemWindowInsets();
-//        }
-        return insets;
-    }
-
-    public <T extends ViewGroup> boolean measureChild(Options options, CoordinatorLayout parent, T child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-//        if (parent.getFitsSystemWindows() && options.statusBar.drawBehind.isFalseOrUndefined()) {
-//            int height = MeasureSpec.getSize(parentHeightMeasureSpec) - 63;
-//            parent.onMeasureChild(child,
-//                    parentWidthMeasureSpec, widthUsed,
-//                    MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY), heightUsed);
-//            return true;
-//        }
-//        if (options.layout.fitSystemWindows.isTrue()) {
-//            int height = MeasureSpec.getSize(parentHeightMeasureSpec) + 63;
-//            parent.onMeasureChild(child,
-//                    parentWidthMeasureSpec, widthUsed,
-//                    MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY), heightUsed);
-//            return true;
-//        }
-        return false;
-    }
-
     public <T extends ViewGroup> boolean layoutChild(Options options, CoordinatorLayout parent, T child, int layoutDirection) {
         Log.d("Presenter", "layoutChild " + child.getClass().getSimpleName());
         StatusBarOptions statusBar = options.copy().withDefaultOptions(defaultOptions).statusBar;
@@ -223,23 +197,6 @@ public class Presenter {
             child.offsetTopAndBottom(63);
             return true;
         }
-
-//        if (parent.getFitsSystemWindows() && options.statusBar.drawBehind.isFalseOrUndefined()) {
-//            parent.onLayoutChild(child, layoutDirection);
-//            child.offsetTopAndBottom(63);
-//            return true;
-//        }
-//        Point parentLoc = ViewUtils.getLocationOnScreen(parent);
-//        Point childLoc = ViewUtils.getLocationOnScreen(child);
-            //        Log.i("Presenter", "layoutChild " + parentLoc +
-            //                           "[" + child.getClass().getSimpleName() + "] " +
-            //                           parent.getY() +
-            //                           " top: " + parent.getTop() +
-            //                           " diff: " + (parentLoc.y - childLoc.y));
-            //        if (options.layout.fitSystemWindows.isFalseOrUndefined()) {
-//            child.offsetTopAndBottom(63);
-//            return true;
-//        }
         return false;
     }
 }
