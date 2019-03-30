@@ -26,6 +26,7 @@ import com.reactnativenavigation.views.BehaviourAdapter;
 import com.reactnativenavigation.views.Component;
 import com.reactnativenavigation.views.Renderable;
 import com.reactnativenavigation.views.element.Element;
+import com.reactnativenavigation.views.insets.Insets;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +42,7 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
     private boolean appearEventPosted;
     private boolean isFirstLayout = true;
     private Bool waitForRender = new NullBool();
+    protected Insets insets = new Insets();
 
     public void offsetTopAndBottom(int offset) {
         if (view != null) view.offsetTopAndBottom(offset);
@@ -337,5 +339,13 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, T child, View dependency) {
         return false;
+    }
+
+    public void updateInsets(Insets insets) {
+        this.insets.update(insets);
+    }
+
+    public Insets getInsets() {
+        return insets;
     }
 }

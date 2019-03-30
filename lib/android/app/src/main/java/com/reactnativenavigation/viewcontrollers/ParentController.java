@@ -48,6 +48,15 @@ public abstract class ParentController<T extends ViewGroup> extends ChildControl
                 .withInitialOptions(initialOptions);
     }
 
+
+    public Options resolveChildOptions(ViewController child) {
+        if (!getChildControllers().contains(child)) throw new RuntimeException("A controller with id " + child.getId() + " is not a child of " + getId());
+        return child
+                .resolveCurrentOptions()
+                .copy()
+                .withInitialOptions(initialOptions);
+    }
+
     @Override
     @CheckResult
     public Options resolveCurrentOptions(Options defaultOptions) {

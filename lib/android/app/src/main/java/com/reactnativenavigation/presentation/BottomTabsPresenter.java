@@ -18,6 +18,7 @@ import com.reactnativenavigation.viewcontrollers.bottomtabs.BottomTabFinder;
 import com.reactnativenavigation.viewcontrollers.bottomtabs.TabSelector;
 import com.reactnativenavigation.views.BottomTabs;
 import com.reactnativenavigation.views.Component;
+import com.reactnativenavigation.views.insets.Insets;
 
 import java.util.List;
 
@@ -169,29 +170,18 @@ public class BottomTabsPresenter {
         }
     }
 
-    public boolean onMeasureChild(Options options, CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+    public boolean onMeasureChild(Options options, CoordinatorLayout parent, ViewController child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
         if (options.bottomTabsOptions.drawBehind.isFalseOrUndefined()) {
             int height = MeasureSpec.getSize(parentHeightMeasureSpec);
-            height -= bottomTabs.getHeight();
-            if (options.statusBar.drawBehind.isFalseOrUndefined()) {
-                height -= 63;
-            }
+            Insets insets = new Insets();
+            insets.setBottomTabsInsets(147);
+            child.updateInsets(insets);
+
             int spec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
-            parent.onMeasureChild(child, parentWidthMeasureSpec, widthUsed, spec, heightUsed);
+            parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, spec, heightUsed);
             return true;
         }
 
         return false;
-    }
-
-    public boolean onLayoutChild(CoordinatorLayout parent, ViewController child, int layoutDirection) {
-        parent.onLayoutChild(child.getView(), layoutDirection);
-        Options options = child.resolveCurrentOptions();
-        if (options.statusBar.drawBehind.isTrue()) {
-            child.offsetTopAndBottom(0);
-        } else {
-            child.offsetTopAndBottom(63);
-        }
-        return true;
     }
 }
