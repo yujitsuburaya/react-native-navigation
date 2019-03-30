@@ -2,7 +2,6 @@ package com.reactnativenavigation.viewcontrollers;
 
 import android.app.Activity;
 import android.support.annotation.CallSuper;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.WindowInsetsCompat;
 import android.view.ViewGroup;
@@ -97,10 +96,5 @@ public abstract class ChildController<T extends ViewGroup> extends ViewControlle
 
     private WindowInsetsCompat applyWindowInsets(WindowInsetsCompat insets) {
         return insets;
-    }
-
-    @Override
-    public boolean onLayoutChild(CoordinatorLayout parent, T child, int layoutDirection) {
-        return presenter.layoutChild(options, parent, child, layoutDirection);
     }
 }

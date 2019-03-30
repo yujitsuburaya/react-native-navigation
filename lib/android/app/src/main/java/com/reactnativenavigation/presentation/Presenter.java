@@ -2,12 +2,9 @@ package com.reactnativenavigation.presentation;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Build;
-import android.support.design.widget.CoordinatorLayout;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.Window;
 
@@ -17,7 +14,6 @@ import com.reactnativenavigation.parse.StatusBarOptions;
 import com.reactnativenavigation.parse.StatusBarOptions.TextColorScheme;
 import com.reactnativenavigation.parse.params.Bool;
 import com.reactnativenavigation.utils.UiUtils;
-import com.reactnativenavigation.utils.ViewUtils;
 
 import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
 
@@ -186,17 +182,5 @@ public class Presenter {
                 view.setSystemUiVisibility(~View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             }
         }
-    }
-
-    public <T extends ViewGroup> boolean layoutChild(Options options, CoordinatorLayout parent, T child, int layoutDirection) {
-        Log.d("Presenter", "layoutChild " + child.getClass().getSimpleName());
-        StatusBarOptions statusBar = options.copy().withDefaultOptions(defaultOptions).statusBar;
-        Point loc = ViewUtils.getLocationOnScreen(parent);
-        if (statusBar.drawBehind.isFalseOrUndefined() && statusBar.visible.isTrueOrUndefined() && loc.y == 0) {
-            parent.onLayoutChild(child, layoutDirection);
-            child.offsetTopAndBottom(63);
-            return true;
-        }
-        return false;
     }
 }

@@ -6,7 +6,6 @@ import android.support.annotation.RestrictTo;
 import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -404,19 +403,16 @@ public class StackController extends ParentController<StackLayout> {
 
     @Override
     public boolean onLayoutChild(CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
-        ViewController childController = findController(child);
-        if (childController == null) return super.onLayoutChild(parent, child, layoutDirection);
-        Options options = childController.resolveCurrentOptions();
-        return presenter.layoutChild(options, parent, child, layoutDirection);
+        ViewController controller = findController(child);
+        if (controller == null) return super.onLayoutChild(parent, child, layoutDirection);
+        return presenter.layoutChild(controller.resolveCurrentOptions(), parent, child, layoutDirection);
     }
 
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, ViewGroup child, View dependency) {
-        ViewController childController = findController(child);
-        if (childController == null) return super.onDependentViewChanged(parent, child, dependency);
-        Options options = childController.resolveCurrentOptions();
-        Log.i("StackController", "onDependentViewChanged " + child.getTag());
-        return presenter.onDependentViewChanged(options, parent, child, dependency);
+        ViewController controller = findController(child);
+        if (controller == null) return super.onDependentViewChanged(parent, child, dependency);
+        return presenter.onDependentViewChanged(controller.resolveCurrentOptions(), parent, child, dependency);
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)

@@ -332,60 +332,6 @@ public class StackPresenter {
         }
     }
 
-    public boolean layoutChild(Options options, CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
-        Log.d("StackPresenter", "layoutChild " + child.getClass().getSimpleName());
-        Point pLoc = ViewUtils.getLocationOnScreen(parent);
-        Point cLoc = ViewUtils.getLocationOnScreen(child);
-        // region playground
-//        if (options.topBar.drawBehind.isFalseOrUndefined() && child.getTop() != topBar.getBottom()) {
-////            parent.onLayoutChild(child, layoutDirection);
-//            int offset = Math.abs(child.getTop() - topBar.getBottom());
-//            Log.w("StackPresenter", "layoutChild: " + child.getTag() + " [" + offset + "]");
-//            child.offsetTopAndBottom(offset);
-//            return true;
-//        }
-//        if (statusBar.drawBehind.isFalseOrUndefined() && loc.y == 0) {
-////            parent.onLayoutChild(child, layoutDirection);
-////            child.offsetTopAndBottom(63);
-////            return true;
-//        }
-//
-////        Options withDefault = options.copy().withDefaultOptions(defaultOptions);
-////        if (parent.getFitsSystemWindows() && withDefault.topBar.drawBehind.isTrue()) {
-////            topBar.setTop(63);
-////        } else {
-////            topBar.setTop(0);
-////        }
-//////        parent.onLayoutChild(child, layoutDirection);
-        // endregion playground
-        return false;
-    }
-
-    public boolean onDependentViewChanged(Options options, CoordinatorLayout parent, ViewGroup child, View dependency) {
-//        Log.d("StackPresenter", "onDependentViewChanged " + child.getTag());
-        Options withDefault = options.copy().withDefaultOptions(defaultOptions);
-        StatusBarOptions statusBar = withDefault.statusBar;
-        TopBarOptions topBarOptions = withDefault.topBar;
-        Point loc = ViewUtils.getLocationOnScreen(parent);
-
-        if (statusBar.drawBehind.isTrue() && statusBar.visible.isTrueOrUndefined() && loc.y == 0) {
-            topBar.setY(63);
-        } else {
-            topBar.setY(loc.y == 0 ? 63 : 0);
-        }
-
-        if (statusBar.drawBehind.isFalseOrUndefined() && topBarOptions.drawBehind.isFalseOrUndefined()) {
-            if (loc.y == 0) {
-                Log.d("StackPresenter", "onDependentViewChanged " + child.getTag());
-                child.setY(147 + 63);
-            } else {
-                child.setY(147);
-            }
-        }
-
-        return true;
-    }
-
     public void mergeChildOptions(Options toMerge, Options resolvedOptions, Component child) {
         TopBarOptions topBar = toMerge.copy().mergeWith(resolvedOptions).withDefaultOptions(defaultOptions).topBar;
         mergeOrientation(toMerge.layout.orientation);
@@ -559,5 +505,34 @@ public class StackPresenter {
         ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) child.getView().getLayoutParams();
         ViewGroup view = child.getView();
 //        lp.bottomMargin = padding;
+    }
+
+    public boolean layoutChild(Options options, CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
+        parent.onLayoutChild(child, layoutDirection);
+        return true;
+    }
+
+    public boolean onDependentViewChanged(Options options, CoordinatorLayout parent, ViewGroup child, View dependency) {
+        Options withDefault = options.copy().withDefaultOptions(defaultOptions);
+        StatusBarOptions statusBar = withDefault.statusBar;
+        TopBarOptions topBarOptions = withDefault.topBar;
+        Point loc = ViewUtils.getLocationOnScreen(parent);
+
+        if (statusBar.drawBehind.isTrue() && statusBar.visible.isTrueOrUndefined() && loc.y == 0) {
+            topBar.setY(63);
+        } else {
+            topBar.setY(loc.y == 0 ? 63 : 0);
+        }
+
+        if (statusBar.drawBehind.isFalseOrUndefined() && topBarOptions.drawBehind.isFalseOrUndefined()) {
+            if (loc.y == 0) {
+                Log.d("StackPresenter", "onDependentViewChanged " + child.getTag());
+                child.setY(147 + 63);
+            } else {
+                child.setY(147);
+            }
+        }
+
+        return true;
     }
 }
