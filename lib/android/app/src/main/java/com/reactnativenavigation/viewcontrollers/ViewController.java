@@ -42,11 +42,7 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
     private boolean appearEventPosted;
     private boolean isFirstLayout = true;
     private Bool waitForRender = new NullBool();
-    protected Insets insets = new Insets();
-
-    public void offsetTopAndBottom(int offset) {
-        if (view != null) view.offsetTopAndBottom(offset);
-    }
+    private Insets insets = new Insets();
 
     public interface ViewVisibilityListener {
         /**

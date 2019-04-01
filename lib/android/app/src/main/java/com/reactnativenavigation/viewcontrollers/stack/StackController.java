@@ -27,7 +27,6 @@ import com.reactnativenavigation.viewcontrollers.topbar.TopBarController;
 import com.reactnativenavigation.views.Component;
 import com.reactnativenavigation.views.ReactComponent;
 import com.reactnativenavigation.views.StackLayout;
-import com.reactnativenavigation.views.insets.Insets;
 import com.reactnativenavigation.views.stack.StackBehaviour;
 import com.reactnativenavigation.views.topbar.TopBar;
 
@@ -416,19 +415,6 @@ public class StackController extends ParentController<StackLayout> {
         ViewController controller = findController(child);
         if (controller == null) return super.onDependentViewChanged(parent, child, dependency);
         return presenter.onDependentViewChanged(controller.resolveCurrentOptions(), parent, child, dependency);
-    }
-
-    @Override
-    public void updateInsets(Insets insets) {
-        for (ViewController child : getChildControllers()) {
-            child.updateInsets(insets);
-        }
-    }
-
-    @Override
-    public void offsetTopAndBottom(int offset) {
-        super.offsetTopAndBottom(offset);
-        presenter.offsetTopAndBottom(offset);
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)

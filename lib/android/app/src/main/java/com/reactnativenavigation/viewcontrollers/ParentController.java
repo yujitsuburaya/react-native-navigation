@@ -14,6 +14,7 @@ import com.reactnativenavigation.parse.params.Bool;
 import com.reactnativenavigation.presentation.Presenter;
 import com.reactnativenavigation.utils.CollectionUtils;
 import com.reactnativenavigation.views.Component;
+import com.reactnativenavigation.views.insets.Insets;
 
 import java.util.Collection;
 
@@ -137,6 +138,13 @@ public abstract class ParentController<T extends ViewGroup> extends ChildControl
 			child.destroy();
 		}
 	}
+
+    @Override
+    public void updateInsets(Insets insets) {
+        for (ViewController child : getChildControllers()) {
+            child.updateInsets(insets);
+        }
+    }
 
 	@CallSuper
     protected void clearOptions() {

@@ -1,9 +1,6 @@
 package com.reactnativenavigation.presentation;
 
 import android.graphics.Color;
-import android.support.annotation.IntRange;
-import android.support.design.widget.CoordinatorLayout;
-import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 
@@ -46,11 +43,6 @@ public class BottomTabsPresenter {
         animator = new BottomTabsAnimator(bottomTabs);
     }
 
-    public void applyLayoutParamsOptions(Options options, int tabIndex) {
-        Options withDefaultOptions = options.copy().withDefaultOptions(defaultOptions);
-        applyDrawBehind(withDefaultOptions.bottomTabsOptions, tabIndex);
-    }
-
     public void mergeOptions(Options options) {
         mergeBottomTabsOptions(options.bottomTabsOptions, options.animations);
     }
@@ -65,7 +57,6 @@ public class BottomTabsPresenter {
         if (tabIndex >= 0) {
             Options withDefaultOptions = options.copy().withDefaultOptions(defaultOptions);
             applyBottomTabsOptions(withDefaultOptions.bottomTabsOptions, withDefaultOptions.animations);
-            applyDrawBehind(withDefaultOptions.bottomTabsOptions, tabIndex);
         }
     }
 
@@ -105,21 +96,6 @@ public class BottomTabsPresenter {
                 animator.hide(animations);
             } else {
                 bottomTabs.hideBottomNavigation(false);
-            }
-        }
-    }
-
-    private void applyDrawBehind(BottomTabsOptions options, @IntRange(from = 0) int tabIndex) {
-        ViewGroup tab = tabs.get(tabIndex).getView();
-        MarginLayoutParams lp = (MarginLayoutParams) tab.getLayoutParams();
-        if (options.drawBehind.isTrue()) {
-            lp.bottomMargin = 0;
-        }
-        if (options.visible.isTrueOrUndefined() && options.drawBehind.isFalseOrUndefined()) {
-            if (bottomTabs.getHeight() == 0) {
-//                UiUtils.runOnPreDrawOnce(bottomTabs, () -> lp.bottomMargin = bottomTabs.getHeight());
-            } else {
-//                lp.bottomMargin = bottomTabs.getHeight();
             }
         }
     }
@@ -170,18 +146,12 @@ public class BottomTabsPresenter {
         }
     }
 
-    public boolean onMeasureChild(Options options, CoordinatorLayout parent, ViewController child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+    public boolean onMeasureChild(ViewController child, Options options) {
         if (options.bottomTabsOptions.drawBehind.isFalseOrUndefined()) {
-            int height = MeasureSpec.getSize(parentHeightMeasureSpec);
             Insets insets = new Insets();
-            insets.setBottomTabsInsets(147);
+            insets.setBottomTabsInsets(147); // TODO use predefined height from resources
             child.updateInsets(insets);
-
-            int spec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
-            parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, spec, heightUsed);
-            return true;
         }
-
         return false;
     }
 }

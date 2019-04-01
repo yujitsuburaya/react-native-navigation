@@ -9,7 +9,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
@@ -529,18 +528,15 @@ public class StackPresenter {
         return true;
     }
 
-    public void offsetTopAndBottom(int offset) {
-        topBar.offsetTopAndBottom(offset);
-    }
-
     public boolean onMeasureChild(CoordinatorLayout parent, ViewController child, Options resolvedOptions, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-        int height = MeasureSpec.getSize(parentHeightMeasureSpec);
-        height -= child.getInsets().getBottomTabsInsets();
-        if (resolvedOptions.statusBar.drawBehind.isFalseOrUndefined()) {
-            height -= 63;
-        }
-        int spec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
-        parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, spec, heightUsed);
-        return true;
+//        int height = View.MeasureSpec.getSize(parentHeightMeasureSpec);
+//        height -= child.getInsets().getBottomTabsInsets();
+//        if (resolvedOptions.statusBar.drawBehind.isFalseOrUndefined()) {
+//            height -= 63;
+//        }
+//        int spec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
+//        parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, spec, heightUsed);
+//        return true;
+        return child.onMeasureChild(parent, child.getView(), parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
     }
 }

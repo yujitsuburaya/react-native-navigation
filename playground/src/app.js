@@ -109,21 +109,31 @@ function start() {
               }
             },
             {
-              stack: {
-                children: [
-                  {
-                    component: {
-                      name: 'Navigation',
-                      options: {
-                        statusBar: {
-                          drawBehind: true
-                        }
-                      }
-                    }
+              component: {
+                name: 'Navigation',
+                options: {
+                  _statusBar: {
+                    drawBehind: true
                   }
-                ]
+                }
               }
             }
+            // {
+            //   stack: {
+            //     children: [
+            //       {
+            //         component: {
+            //           name: 'Navigation',
+            //           options: {
+            //             _statusBar: {
+            //               drawBehind: true
+            //             }
+            //           }
+            //         }
+            //       }
+            //     ]
+            //   }
+            // }
           ]
         }
       }

@@ -130,7 +130,10 @@ class Options extends Component {
       title: {
         component: {
           name: Screens.ReactTitleView,
-          alignment: 'center'
+          alignment: 'center',
+          passProps: {
+            text: 'Press Me'
+          }
         }
       }
     }

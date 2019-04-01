@@ -2,6 +2,7 @@ package com.reactnativenavigation.viewcontrollers;
 
 import android.app.Activity;
 import android.support.annotation.CallSuper;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.WindowInsetsCompat;
 import android.view.ViewGroup;
@@ -72,6 +73,13 @@ public abstract class ChildController<T extends ViewGroup> extends ViewControlle
         if (options == Options.EMPTY) return;
         if (isViewShown()) presenter.mergeOptions(getView(), options);
         super.mergeOptions(options);
+    }
+
+    @Override
+    public boolean onMeasureChild(CoordinatorLayout parent, T child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        ViewController controller = findController(child);
+        presenter.onMeasureChild(parent, controller, resolveCurrentOptions(), parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+        return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
     }
 
     @Override

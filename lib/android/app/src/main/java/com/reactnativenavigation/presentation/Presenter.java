@@ -3,8 +3,10 @@ package com.reactnativenavigation.presentation;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.design.widget.CoordinatorLayout;
 import android.util.Log;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.Window;
 
@@ -14,6 +16,7 @@ import com.reactnativenavigation.parse.StatusBarOptions;
 import com.reactnativenavigation.parse.StatusBarOptions.TextColorScheme;
 import com.reactnativenavigation.parse.params.Bool;
 import com.reactnativenavigation.utils.UiUtils;
+import com.reactnativenavigation.viewcontrollers.ViewController;
 
 import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
 
@@ -55,6 +58,17 @@ public class Presenter {
     public void onViewBroughtToFront(Options options) {
         Options withDefaultOptions = options.copy().withDefaultOptions(defaultOptions);
         applyStatusBarOptions(withDefaultOptions);
+    }
+
+    public boolean onMeasureChild(CoordinatorLayout parent, ViewController child, Options resolvedOptions, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        int height = MeasureSpec.getSize(parentHeightMeasureSpec);
+        height -= child.getInsets().getBottomTabsInsets();
+        if (resolvedOptions.statusBar.drawBehind.isFalseOrUndefined()) {
+            height -= 63;
+        }
+        int spec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
+        parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, spec, heightUsed);
+        return true;
     }
 
     private void applyOrientation(OrientationOptions options) {
