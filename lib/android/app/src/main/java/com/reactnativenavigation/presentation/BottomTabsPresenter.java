@@ -146,12 +146,11 @@ public class BottomTabsPresenter {
         }
     }
 
-    public boolean onMeasureChild(ViewController child, Options options) {
+    public void onMeasureChild(ViewController child, Options options) {
         if (options.bottomTabsOptions.drawBehind.isFalseOrUndefined()) {
             Insets insets = new Insets();
             insets.setBottomTabsInsets(147); // TODO use predefined height from resources
             child.updateInsets(insets);
         }
-        return false;
     }
 }

@@ -397,13 +397,6 @@ public class StackController extends ParentController<StackLayout> {
     }
 
     @Override
-    public boolean onLayoutChild(CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
-        ViewController controller = findController(child);
-        if (controller == null) return super.onLayoutChild(parent, child, layoutDirection);
-        return presenter.layoutChild(controller.resolveCurrentOptions(), parent, child, layoutDirection);
-    }
-
-    @Override
     public boolean onMeasureChild(CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
         ViewController controller = findController(child);
         if (controller == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
@@ -414,7 +407,7 @@ public class StackController extends ParentController<StackLayout> {
     public boolean onDependentViewChanged(CoordinatorLayout parent, ViewGroup child, View dependency) {
         ViewController controller = findController(child);
         if (controller == null) return super.onDependentViewChanged(parent, child, dependency);
-        return presenter.onDependentViewChanged(controller.resolveCurrentOptions(), parent, child, dependency);
+        return presenter.onDependentViewChanged(resolveChildOptions(controller), parent, child, dependency);
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)

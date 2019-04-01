@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -500,11 +501,6 @@ public class StackPresenter {
         return componentLeftButtons.containsKey(child) ? new ArrayList<>(componentLeftButtons.get(child).values()) : null;
     }
 
-    public boolean layoutChild(Options options, CoordinatorLayout parent, ViewGroup child, int layoutDirection) {
-        parent.onLayoutChild(child, layoutDirection);
-        return true;
-    }
-
     public boolean onDependentViewChanged(Options options, CoordinatorLayout parent, ViewGroup child, View dependency) {
         Options withDefault = options.copy().withDefaultOptions(defaultOptions);
         StatusBarOptions statusBar = withDefault.statusBar;
@@ -519,24 +515,28 @@ public class StackPresenter {
 
         if (statusBar.drawBehind.isFalseOrUndefined() && topBarOptions.drawBehind.isFalseOrUndefined()) {
             if (loc.y == 0) {
+                Log.i("StackPresenter", "onDependentViewChanged 147 + 63 " + child.getTag());
                 child.setY(147 + 63);
             } else {
+                Log.w("StackPresenter", "onDependentViewChanged: 147");
                 child.setY(147);
             }
+        } else {
+            Log.e("StackPresenter", "onDependentViewChanged -");
         }
 
         return true;
     }
 
     public boolean onMeasureChild(CoordinatorLayout parent, ViewController child, Options resolvedOptions, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-//        int height = View.MeasureSpec.getSize(parentHeightMeasureSpec);
-//        height -= child.getInsets().getBottomTabsInsets();
-//        if (resolvedOptions.statusBar.drawBehind.isFalseOrUndefined()) {
-//            height -= 63;
-//        }
-//        int spec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
-//        parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, spec, heightUsed);
-//        return true;
-        return child.onMeasureChild(parent, child.getView(), parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+        int height = View.MeasureSpec.getSize(parentHeightMeasureSpec);
+        height -= child.getInsets().getBottomTabsInsets();
+        if (resolvedOptions.statusBar.drawBehind.isFalseOrUndefined()) {
+            height -= 63;
+        }
+        int spec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
+        parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, spec, heightUsed);
+        return true;
+//        return child.onMeasureChild(parent, child.getView(), parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
     }
 }

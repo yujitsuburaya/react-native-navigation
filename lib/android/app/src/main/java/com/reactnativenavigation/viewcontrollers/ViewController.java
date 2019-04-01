@@ -337,6 +337,10 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
         return false;
     }
 
+    public boolean onMeasure(CoordinatorLayout parent, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        return false;
+    }
+
     public void updateInsets(Insets insets) {
         this.insets.update(insets);
     }

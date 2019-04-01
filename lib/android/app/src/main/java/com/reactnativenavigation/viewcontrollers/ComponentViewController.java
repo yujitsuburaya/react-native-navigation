@@ -2,6 +2,7 @@ package com.reactnativenavigation.viewcontrollers;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 
 import com.reactnativenavigation.parse.Options;
@@ -15,6 +16,10 @@ public class ComponentViewController extends ChildController<ComponentLayout> {
     private final String componentName;
     private ComponentPresenter presenter;
     private final ReactViewCreator viewCreator;
+
+    ReactComponent getComponent() {
+        return view;
+    }
 
     public ComponentViewController(final Activity activity,
                                    final ChildControllersRegistry childRegistry,
@@ -80,8 +85,9 @@ public class ComponentViewController extends ChildController<ComponentLayout> {
         super.mergeOptions(options);
     }
 
-    ReactComponent getComponent() {
-        return view;
+    @Override
+    public boolean onMeasure(CoordinatorLayout parent, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        return presenter.onMeasure(parent, this, getParentController().resolveChildOptions(this), parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
     }
 
     @Override

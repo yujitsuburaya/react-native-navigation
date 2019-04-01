@@ -192,8 +192,11 @@ public class BottomTabsController extends ParentController implements AHBottomNa
         ViewController childController = findController(child);
         if (childController != null) {
             presenter.onMeasureChild(childController, childController.resolveCurrentOptions());
+            //        return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+            return childController.onMeasure(parent, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+        } else {
+            return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
         }
-        return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
     }
 
     @NonNull

@@ -108,32 +108,32 @@ function start() {
                 }
               }
             },
+            // {
+            //   component: {
+            //     name: 'Navigation',
+            //     options: {
+            //       _statusBar: {
+            //         drawBehind: true
+            //       }
+            //     }
+            //   }
+            // }
             {
-              component: {
-                name: 'Navigation',
+              stack: {
+                children: [
+                  {
+                    component: {
+                      name: 'Navigation'
+                    }
+                  }
+                ],
                 options: {
-                  _statusBar: {
-                    drawBehind: true
+                  statusBar: {
+                    drawBehind: false
                   }
                 }
               }
             }
-            // {
-            //   stack: {
-            //     children: [
-            //       {
-            //         component: {
-            //           name: 'Navigation',
-            //           options: {
-            //             _statusBar: {
-            //               drawBehind: true
-            //             }
-            //           }
-            //         }
-            //       }
-            //     ]
-            //   }
-            // }
           ]
         }
       }
