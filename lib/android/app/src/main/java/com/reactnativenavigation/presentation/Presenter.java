@@ -39,12 +39,12 @@ public class Presenter {
         Options withDefaultOptions = options.copy().withDefaultOptions(defaultOptions);
         applyOrientation(withDefaultOptions.layout.orientation);
         applyViewOptions(view, withDefaultOptions);
-        applyStatusBarOptions(withDefaultOptions);
+        applyStatusBarOptions(view, withDefaultOptions);
     }
 
-    public void onViewBroughtToFront(Options options) {
+    public void onViewBroughtToFront(View view, Options options) {
         Options withDefaultOptions = options.copy().withDefaultOptions(defaultOptions);
-        applyStatusBarOptions(withDefaultOptions);
+        applyStatusBarOptions(view, withDefaultOptions);
     }
 
     private void applyOrientation(OrientationOptions options) {
@@ -64,11 +64,11 @@ public class Presenter {
         }
     }
 
-    private void applyStatusBarOptions(Options options) {
+    private void applyStatusBarOptions(View view, Options options) {
         setStatusBarBackgroundColor(options.statusBar);
         setTextColorScheme(options.statusBar.textColorScheme);
         setTranslucent(options.statusBar);
-        //        setStatusBarVisible(view, statusBar.visible, statusBar.drawBehind);
+        setStatusBarVisible(view, options.statusBar.visible);
     }
 
     private void setTranslucent(StatusBarOptions options) {
@@ -80,11 +80,9 @@ public class Presenter {
         }
     }
 
-    private void setStatusBarVisible(View view, Bool visible, Bool drawBehind) {
+    private void setStatusBarVisible(View view, Bool visible) {
         if (visible.isFalse()) {
-            view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN);
-        } else if (drawBehind.isTrue()) {
-            view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
     }
 
