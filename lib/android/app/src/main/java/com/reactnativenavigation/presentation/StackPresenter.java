@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -509,26 +508,20 @@ public class StackPresenter {
         } else {
             topBar.setY(0);
         }
-        Log.d("StackPresenter", "onDependentViewChanged " + options.topBar.title.text.get(child.getTag().toString()));
+
         if (statusBar.drawBehind.isFalseOrUndefined() && topBarOptions.drawBehind.isFalseOrUndefined()) {
             if (parent.getTop() == 0) {
-                Log.i("StackPresenter", "onDependentViewChanged 147 + 63 " + options.topBar.title.text.get(child.getTag().toString()));
-//                child.setY(147 + 63);
                 ((MarginLayoutParams) child.getLayoutParams()).topMargin = 147 + 63;
             } else {
-                Log.w("StackPresenter", "onDependentViewChanged: 147 " + options.topBar.title.text.get(child.getTag().toString()));
-//                child.setY(147);
                 ((MarginLayoutParams) child.getLayoutParams()).topMargin = 147;
             }
             child.requestLayout();
-        } else {
-            Log.e("StackPresenter", "onDependentViewChanged - " + options.topBar.title.text.get(child.getTag().toString()));
         }
 
         return true;
     }
 
-    public boolean onMeasureChild(CoordinatorLayout parent, ViewController child, Options resolvedOptions, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+    public boolean onMeasureChild(CoordinatorLayout parent, ViewController child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
         int height = View.MeasureSpec.getSize(parentHeightMeasureSpec);
         height -= child.getInsets().getBottomTabsInsets();
         int spec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
