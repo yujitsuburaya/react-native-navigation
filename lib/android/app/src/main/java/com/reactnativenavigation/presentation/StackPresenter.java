@@ -2,7 +2,6 @@ package com.reactnativenavigation.presentation;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
 import android.support.design.widget.CoordinatorLayout;
@@ -31,7 +30,6 @@ import com.reactnativenavigation.utils.ButtonPresenter;
 import com.reactnativenavigation.utils.ImageLoader;
 import com.reactnativenavigation.utils.ObjectUtils;
 import com.reactnativenavigation.utils.UiUtils;
-import com.reactnativenavigation.utils.ViewUtils;
 import com.reactnativenavigation.viewcontrollers.IReactView;
 import com.reactnativenavigation.viewcontrollers.ReactViewCreator;
 import com.reactnativenavigation.viewcontrollers.TitleBarButtonController;
@@ -501,28 +499,27 @@ public class StackPresenter {
         return componentLeftButtons.containsKey(child) ? new ArrayList<>(componentLeftButtons.get(child).values()) : null;
     }
 
-    public boolean onDependentViewChanged(Options options, CoordinatorLayout parent, ViewGroup child, View dependency) {
+    public boolean onDependentViewChanged(Options options, CoordinatorLayout parent, ViewGroup child) {
         Options withDefault = options.copy().withDefaultOptions(defaultOptions);
         StatusBarOptions statusBar = withDefault.statusBar;
         TopBarOptions topBarOptions = withDefault.topBar;
-        Point loc = ViewUtils.getLocationOnScreen(parent);
 
-        if (loc.y == 0) {
+        if (parent.getTop() == 0 && statusBar.visible.isTrueOrUndefined()) {
             topBar.setY(63);
         } else {
             topBar.setY(0);
         }
-
+        Log.d("StackPresenter", "onDependentViewChanged " + options.topBar.title.text.get(child.getTag().toString()));
         if (statusBar.drawBehind.isFalseOrUndefined() && topBarOptions.drawBehind.isFalseOrUndefined()) {
-            if (loc.y == 0) {
-                Log.i("StackPresenter", "onDependentViewChanged 147 + 63 " + child.getTag());
-                child.setY(147 + 63);
+            if (parent.getTop() == 0) {
+                Log.i("StackPresenter", "onDependentViewChanged 147 + 63 " + options.topBar.title.text.get(child.getTag().toString()));
+                ((MarginLayoutParams) child.getLayoutParams()).topMargin = 147 + 63;
             } else {
-                Log.w("StackPresenter", "onDependentViewChanged: 147");
-                child.setY(147);
+                Log.w("StackPresenter", "onDependentViewChanged: 147 " + options.topBar.title.text.get(child.getTag().toString()));
+                ((MarginLayoutParams) child.getLayoutParams()).topMargin = 147;
             }
         } else {
-            Log.e("StackPresenter", "onDependentViewChanged -");
+            Log.e("StackPresenter", "onDependentViewChanged - " + options.topBar.title.text.get(child.getTag().toString()));
         }
 
         return true;
@@ -531,12 +528,8 @@ public class StackPresenter {
     public boolean onMeasureChild(CoordinatorLayout parent, ViewController child, Options resolvedOptions, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
         int height = View.MeasureSpec.getSize(parentHeightMeasureSpec);
         height -= child.getInsets().getBottomTabsInsets();
-        if (resolvedOptions.statusBar.drawBehind.isFalseOrUndefined()) {
-            height -= 63;
-        }
         int spec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
         parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, spec, heightUsed);
         return true;
-//        return child.onMeasureChild(parent, child.getView(), parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
     }
 }

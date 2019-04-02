@@ -48,6 +48,7 @@ public class ModalPresenter {
         toAdd.setWaitForRender(options.animations.showModal.waitForRender);
         CoordinatorLayout.LayoutParams lp = new CoordinatorLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
         lp.setBehavior(new BehaviourDelegate(toAdd));
+        toAdd.getView().setFitsSystemWindows(true);
         modalsLayout.addView(toAdd.getView(), lp);
 
         if (options.animations.showModal.enabled.isTrueOrUndefined()) {

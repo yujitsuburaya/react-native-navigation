@@ -1,6 +1,7 @@
 package com.reactnativenavigation.viewcontrollers.modal;
 
 import android.app.Activity;
+import android.support.design.widget.CoordinatorLayout;
 import android.widget.FrameLayout;
 
 import com.reactnativenavigation.BaseTest;
@@ -38,7 +39,7 @@ public class ModalPresenterTest extends BaseTest {
     private ModalPresenter uut;
     private ModalAnimator animator;
     private ViewController root;
-    private FrameLayout modalsLayout;
+    private CoordinatorLayout modalsLayout;
 
     @Override
     public void beforeEach() {
@@ -49,13 +50,13 @@ public class ModalPresenterTest extends BaseTest {
         FrameLayout contentLayout = new FrameLayout(activity);
         FrameLayout rootLayout = new FrameLayout(activity);
         rootLayout.addView(root.getView());
-        modalsLayout = new FrameLayout(activity);
+        modalsLayout = new CoordinatorLayout(activity);
         contentLayout.addView(rootLayout);
         contentLayout.addView(modalsLayout);
         activity.setContentView(contentLayout);
 
         animator = spy(new ModalAnimator(activity));
-        uut = new ModalPresenter(animator);
+        uut = new ModalPresenter(animator, behaviourAdapter);
         uut.setModalsLayout(modalsLayout);
         uut.setRootLayout(rootLayout);
         modal1 = spy(new SimpleViewController(activity, childRegistry, MODAL_ID_1, new Options()));

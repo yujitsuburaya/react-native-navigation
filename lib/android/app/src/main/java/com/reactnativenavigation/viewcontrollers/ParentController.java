@@ -51,7 +51,7 @@ public abstract class ParentController<T extends ViewGroup> extends ChildControl
 
 
     public Options resolveChildOptions(ViewController child) {
-        if (!getChildControllers().contains(child)) throw new RuntimeException("A controller with id " + child.getId() + " is not a child of " + getId());
+	    if (child == this) return resolveCurrentOptions();
         return child
                 .resolveCurrentOptions()
                 .copy()

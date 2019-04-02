@@ -407,7 +407,7 @@ public class StackController extends ParentController<StackLayout> {
     public boolean onDependentViewChanged(CoordinatorLayout parent, ViewGroup child, View dependency) {
         ViewController controller = findController(child);
         if (controller == null) return super.onDependentViewChanged(parent, child, dependency);
-        return presenter.onDependentViewChanged(resolveChildOptions(controller), parent, child, dependency);
+        return presenter.onDependentViewChanged(resolveChildOptions(controller), parent, child);
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
