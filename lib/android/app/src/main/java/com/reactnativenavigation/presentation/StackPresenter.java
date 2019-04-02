@@ -513,11 +513,14 @@ public class StackPresenter {
         if (statusBar.drawBehind.isFalseOrUndefined() && topBarOptions.drawBehind.isFalseOrUndefined()) {
             if (parent.getTop() == 0) {
                 Log.i("StackPresenter", "onDependentViewChanged 147 + 63 " + options.topBar.title.text.get(child.getTag().toString()));
+//                child.setY(147 + 63);
                 ((MarginLayoutParams) child.getLayoutParams()).topMargin = 147 + 63;
             } else {
                 Log.w("StackPresenter", "onDependentViewChanged: 147 " + options.topBar.title.text.get(child.getTag().toString()));
+//                child.setY(147);
                 ((MarginLayoutParams) child.getLayoutParams()).topMargin = 147;
             }
+            child.requestLayout();
         } else {
             Log.e("StackPresenter", "onDependentViewChanged - " + options.topBar.title.text.get(child.getTag().toString()));
         }
