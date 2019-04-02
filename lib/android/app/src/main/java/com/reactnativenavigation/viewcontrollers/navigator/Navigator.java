@@ -135,14 +135,10 @@ public class Navigator extends ParentController {
         rootPresenter.setRoot(root, defaultOptions, new CommandListenerAdapter(commandListener) {
             @Override
             public void onSuccess(String childId) {
-                if (removeSplashView) removePreviousContentView();
+                if (removeSplashView) contentLayout.removeViewAt(0);
                 super.onSuccess(childId);
             }
         }, reactInstanceManager);
-    }
-
-    private void removePreviousContentView() {
-        contentLayout.removeViewAt(0);
     }
 
     public void mergeOptions(final String componentId, Options options) {

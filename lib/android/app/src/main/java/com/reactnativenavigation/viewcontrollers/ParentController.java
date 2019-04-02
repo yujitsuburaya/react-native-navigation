@@ -121,9 +121,6 @@ public abstract class ParentController<T extends ViewGroup> extends ChildControl
     @CallSuper
     public void applyChildOptions(Options options, Component child) {
         this.options = initialOptions.mergeWith(options);
-        if (isRoot()) {
-            presenter.applyRootOptions(getView(), options);
-        }
     }
 
     @CallSuper

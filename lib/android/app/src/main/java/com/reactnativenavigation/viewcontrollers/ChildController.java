@@ -29,7 +29,7 @@ public abstract class ChildController<T extends ViewGroup> extends ViewControlle
     public T getView() {
         if (view == null) {
             super.getView();
-            presenter.onViewCreated(view, options);
+            view.setFitsSystemWindows(true);
             ViewCompat.setOnApplyWindowInsetsListener(view, (view, insets) -> applyWindowInsets(insets));
         }
         return view;
@@ -62,9 +62,6 @@ public abstract class ChildController<T extends ViewGroup> extends ViewControlle
         super.applyOptions(options);
         Options resolvedOptions = resolveCurrentOptions();
         presenter.applyOptions(getView(), resolvedOptions);
-        if (isRoot()) {
-            presenter.applyRootOptions(getView(), resolvedOptions);
-        }
     }
 
     @Override

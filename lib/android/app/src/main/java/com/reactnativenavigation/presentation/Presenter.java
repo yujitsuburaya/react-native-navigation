@@ -3,7 +3,6 @@ package com.reactnativenavigation.presentation;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.view.Window;
@@ -43,15 +42,6 @@ public class Presenter {
         applyStatusBarOptions(withDefaultOptions);
     }
 
-    public void applyRootOptions(View view, Options options) {
-        Options withDefaultOptions = options.copy().withDefaultOptions(defaultOptions);
-//        setDrawBehindStatusBar(view, withDefaultOptions.statusBar);
-    }
-
-    public void onViewCreated(View view, Options options) {
-        setFitSystemWindow(view, options.statusBar);
-    }
-
     public void onViewBroughtToFront(Options options) {
         Options withDefaultOptions = options.copy().withDefaultOptions(defaultOptions);
         applyStatusBarOptions(withDefaultOptions);
@@ -88,18 +78,6 @@ public class Presenter {
         } else {
             window.clearFlags(FLAG_TRANSLUCENT_STATUS);
         }
-    }
-
-    private void setFitSystemWindow(View view, StatusBarOptions statusBar) {
-        if (statusBar.drawBehind.isTrue()) {
-            Log.i("Presenter", "setFitSystemWindow " + view.getClass().getSimpleName());
-            view.setFitsSystemWindows(true);
-        }
-//        if (layout.fitSystemWindows.isFalseOrUndefined()) {
-//            view.setFitsSystemWindows(false);
-//        } else {
-//            view.setFitsSystemWindows(true);
-//        }
     }
 
     private void setStatusBarVisible(View view, Bool visible, Bool drawBehind) {
