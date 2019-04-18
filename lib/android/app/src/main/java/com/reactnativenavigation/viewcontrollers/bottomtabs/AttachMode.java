@@ -19,8 +19,6 @@ public abstract class AttachMode {
     protected final BottomTabsPresenter presenter;
     protected final List<ViewController> tabs;
     final ViewController initialTab;
-    private final Options resolved;
-
 
     public static AttachMode get(ViewGroup parent, List<ViewController> tabs, BottomTabsPresenter presenter, Options resolved) {
         switch (resolved.bottomTabsOptions.tabsAttachMode) {
@@ -39,7 +37,6 @@ public abstract class AttachMode {
         this.parent = parent;
         this.tabs = tabs;
         this.presenter = presenter;
-        this.resolved = resolved;
         initialTab = tabs.get(resolved.bottomTabsOptions.currentTabIndex.get(0));
     }
 

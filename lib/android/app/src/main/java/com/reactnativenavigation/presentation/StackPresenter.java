@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.FrameLayout;
@@ -498,34 +496,21 @@ public class StackPresenter {
         return componentLeftButtons.containsKey(child) ? new ArrayList<>(componentLeftButtons.get(child).values()) : null;
     }
 
-    public boolean onDependentViewChanged(Options options, CoordinatorLayout parent, ViewGroup child) {
+    public boolean onDependentViewChanged(Options options, ViewController child) {
         Options withDefault = options.copy().withDefaultOptions(defaultOptions);
         StatusBarOptions statusBar = withDefault.statusBar;
-        TopBarOptions topBarOptions = withDefault.topBar;
 
-        if (parent.getTop() == 0 && statusBar.visible.isTrueOrUndefined()) {
+        if (statusBar.visible.isTrueOrUndefined()) {
             topBar.setY(63);
         } else {
             topBar.setY(0);
         }
 
+        TopBarOptions topBarOptions = withDefault.topBar;
         if (statusBar.drawBehind.isFalseOrUndefined() && topBarOptions.drawBehind.isFalseOrUndefined()) {
-            if (parent.getTop() == 0) {
-                ((MarginLayoutParams) child.getLayoutParams()).topMargin = 147 + 63;
-            } else {
-                ((MarginLayoutParams) child.getLayoutParams()).topMargin = 147;
-            }
-            child.requestLayout();
+            child.applyTopInsets();
         }
 
-        return true;
-    }
-
-    public boolean onMeasureChild(CoordinatorLayout parent, ViewController child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-        int height = View.MeasureSpec.getSize(parentHeightMeasureSpec);
-        height -= child.getInsets().getBottomTabsInsets();
-        int spec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
-        parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, spec, heightUsed);
         return true;
     }
 }

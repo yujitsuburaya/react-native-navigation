@@ -5,7 +5,9 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,7 +16,6 @@ import com.reactnativenavigation.parse.params.Bool;
 import com.reactnativenavigation.presentation.Presenter;
 import com.reactnativenavigation.utils.CollectionUtils;
 import com.reactnativenavigation.views.Component;
-import com.reactnativenavigation.views.insets.Insets;
 
 import java.util.Collection;
 
@@ -136,13 +137,6 @@ public abstract class ParentController<T extends ViewGroup> extends ChildControl
 		}
 	}
 
-    @Override
-    public void updateInsets(Insets insets) {
-        for (ViewController child : getChildControllers()) {
-            child.updateInsets(insets);
-        }
-    }
-
 	@CallSuper
     protected void clearOptions() {
 	    performOnParentController(parent -> ((ParentController) parent).clearOptions());
@@ -164,5 +158,36 @@ public abstract class ParentController<T extends ViewGroup> extends ChildControl
 
     public void onChildDestroyed(Component child) {
 
+    }
+
+    public int getTopInset(ViewController child) {
+        if (isRoot()) {
+            return resolveChildOptions(child).statusBar.drawBehind.isTrue() ? 0 : 63;
+        }
+        return super.getTopInset(child);
+    }
+
+    @Override
+    public void applyTopInsets() {
+        getCurrentChild().applyTopInsets();
+    }
+
+    @Override
+    public boolean onMeasureChild(CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        ViewController controller = findController(child);
+        if (controller == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+        return onMeasureChild(parent, controller, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+    }
+
+    private boolean onMeasureChild(CoordinatorLayout parent, ViewController child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        if (!(child instanceof ParentController)) {
+            int height = View.MeasureSpec.getSize(parentHeightMeasureSpec);
+            height -= child.getBottomInsets();
+            Log.i("StackPresenter", child.getId() + " h: " + height + " bi: " + child.getBottomInsets());
+            int spec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
+            parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, spec, heightUsed);
+            return true;
+        }
+        return false;
     }
 }

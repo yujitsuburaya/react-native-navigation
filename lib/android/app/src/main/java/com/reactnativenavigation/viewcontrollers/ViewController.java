@@ -26,13 +26,13 @@ import com.reactnativenavigation.views.BehaviourAdapter;
 import com.reactnativenavigation.views.Component;
 import com.reactnativenavigation.views.Renderable;
 import com.reactnativenavigation.views.element.Element;
-import com.reactnativenavigation.views.insets.Insets;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static com.reactnativenavigation.utils.CollectionUtils.*;
+import static com.reactnativenavigation.utils.ObjectUtils.perform;
 
 public abstract class ViewController<T extends ViewGroup> implements ViewTreeObserver.OnGlobalLayoutListener,
         ViewGroup.OnHierarchyChangeListener,
@@ -42,7 +42,6 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
     private boolean appearEventPosted;
     private boolean isFirstLayout = true;
     private Bool waitForRender = new NullBool();
-    private Insets insets = new Insets();
 
     public interface ViewVisibilityListener {
         /**
@@ -337,15 +336,23 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
         return false;
     }
 
-    public boolean onMeasure(CoordinatorLayout parent, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-        return false;
+    public void applyTopInsets() {
+
     }
 
-    public void updateInsets(Insets insets) {
-        this.insets.update(insets);
+    int getTopInset() {
+        return getTopInset(this);
     }
 
-    public Insets getInsets() {
-        return insets;
+    public int getTopInset(ViewController child) {
+        return perform(parentController, 0, p -> p.getTopInset(this));
+    }
+
+    public int getBottomInsets() {
+        return getBottomInsets(this);
+    }
+
+    public int getBottomInsets(ViewController child) {
+        return perform(parentController, 0, p -> p.getBottomInsets(child));
     }
 }

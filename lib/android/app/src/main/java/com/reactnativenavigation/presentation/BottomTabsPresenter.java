@@ -1,6 +1,7 @@
 package com.reactnativenavigation.presentation;
 
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 
@@ -15,7 +16,6 @@ import com.reactnativenavigation.viewcontrollers.bottomtabs.BottomTabFinder;
 import com.reactnativenavigation.viewcontrollers.bottomtabs.TabSelector;
 import com.reactnativenavigation.views.BottomTabs;
 import com.reactnativenavigation.views.Component;
-import com.reactnativenavigation.views.insets.Insets;
 
 import java.util.List;
 
@@ -146,11 +146,12 @@ public class BottomTabsPresenter {
         }
     }
 
-    public void onMeasureChild(ViewController child, Options options) {
-        if (options.bottomTabsOptions.drawBehind.isFalseOrUndefined()) {
-            Insets insets = new Insets();
-            insets.setBottomTabsInsets(147); // TODO use predefined height from resources
-            child.updateInsets(insets);
+    public boolean applyBottomInsets(@Nullable ViewController parent) {
+        if (parent != null) {
+            MarginLayoutParams lp = (MarginLayoutParams) bottomTabs.getLayoutParams();
+            lp.bottomMargin = parent.getBottomInsets();
+            return true;
         }
+        return false;
     }
 }

@@ -12,7 +12,6 @@ import com.reactnativenavigation.parse.OrientationOptions;
 import com.reactnativenavigation.parse.StatusBarOptions;
 import com.reactnativenavigation.parse.StatusBarOptions.TextColorScheme;
 import com.reactnativenavigation.parse.params.Bool;
-import com.reactnativenavigation.utils.UiUtils;
 
 import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
 
@@ -109,13 +108,6 @@ public class Presenter {
         int flags = view.getSystemUiVisibility();
         flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
         view.setSystemUiVisibility(flags);
-    }
-
-    private void setDrawBehindStatusBar(View view, StatusBarOptions statusBar) {
-        if (statusBar.visible.isFalse()) {
-            ((MarginLayoutParams) view.getLayoutParams()).topMargin = statusBar.drawBehind.isTrue() ?
-                    0 : UiUtils.getStatusBarHeight(activity);
-        }
     }
 
     private void mergeStatusBarOptions(View view, StatusBarOptions statusBar) {

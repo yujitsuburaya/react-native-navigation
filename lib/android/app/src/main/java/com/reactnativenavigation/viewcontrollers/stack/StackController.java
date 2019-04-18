@@ -397,17 +397,16 @@ public class StackController extends ParentController<StackLayout> {
     }
 
     @Override
-    public boolean onMeasureChild(CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-        ViewController controller = findController(child);
-        if (controller == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
-        return presenter.onMeasureChild(parent, controller, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
-    }
-
-    @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, ViewGroup child, View dependency) {
         ViewController controller = findController(child);
         if (controller == null) return super.onDependentViewChanged(parent, child, dependency);
-        return presenter.onDependentViewChanged(resolveChildOptions(controller), parent, child);
+        return presenter.onDependentViewChanged(resolveChildOptions(controller), controller);
+    }
+
+    @Override
+    public int getTopInset(ViewController child) {
+        int insets = resolveChildOptions(child).topBar.drawBehind.isTrue() ? 0 : 147;
+        return super.getTopInset(child) + insets;
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)

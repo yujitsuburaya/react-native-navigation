@@ -1,10 +1,9 @@
 package com.reactnativenavigation.presentation;
 
-import android.support.design.widget.CoordinatorLayout;
-import android.view.View.MeasureSpec;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.reactnativenavigation.parse.Options;
-import com.reactnativenavigation.viewcontrollers.ViewController;
 import com.reactnativenavigation.views.ComponentLayout;
 
 public class ComponentPresenter {
@@ -27,21 +26,16 @@ public class ComponentPresenter {
         mergeBackgroundColor(view, options);
     }
 
-    public boolean onMeasure(CoordinatorLayout parent, ViewController child, Options resolvedOptions, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-        int height = MeasureSpec.getSize(parentHeightMeasureSpec);
-        height -= child.getInsets().getBottomTabsInsets();
-        if (resolvedOptions.statusBar.drawBehind.isFalseOrUndefined()) {
-            height -= 63;
-        }
-        int spec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
-        parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, spec, heightUsed);
-        return true;
-    }
-
-
     private void mergeBackgroundColor(ComponentLayout view, Options options) {
         if (options.layout.componentBackgroundColor.hasValue()) {
             view.setBackgroundColor(options.layout.componentBackgroundColor.get());
+        }
+    }
+
+    public void applyTopInsets(View view, int topInsets) {
+        if (view != null) {
+            ((ViewGroup.MarginLayoutParams) view.getLayoutParams()).topMargin = topInsets;
+            view.requestLayout();
         }
     }
 }

@@ -12,7 +12,7 @@ import com.reactnativenavigation.viewcontrollers.navigator.Navigator;
 import com.reactnativenavigation.views.Component;
 
 public abstract class ChildController<T extends ViewGroup> extends ViewController<T>  {
-    final Presenter presenter;
+    private final Presenter presenter;
     private final ChildControllersRegistry childRegistry;
 
     public ChildControllersRegistry getChildRegistry() {

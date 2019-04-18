@@ -2,7 +2,6 @@ package com.reactnativenavigation.viewcontrollers;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 
 import com.reactnativenavigation.parse.Options;
@@ -44,12 +43,12 @@ public class ComponentViewController extends ChildController<ComponentLayout> {
     @Override
     public void onViewAppeared() {
         super.onViewAppeared();
-        view.sendComponentStart();
+        if (view != null) view.sendComponentStart();
     }
 
     @Override
     public void onViewDisappear() {
-        view.sendComponentStop();
+        if (view != null) view.sendComponentStop();
         super.onViewDisappear();
     }
 
@@ -67,7 +66,7 @@ public class ComponentViewController extends ChildController<ComponentLayout> {
 
     @Override
     public boolean isViewShown() {
-        return super.isViewShown() && view.isReady();
+        return super.isViewShown() && view != null && view.isReady();
     }
 
     @NonNull
@@ -86,8 +85,8 @@ public class ComponentViewController extends ChildController<ComponentLayout> {
     }
 
     @Override
-    public boolean onMeasure(CoordinatorLayout parent, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-        return presenter.onMeasure(parent, this, getParentController().resolveChildOptions(this), parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+    public void applyTopInsets() {
+        presenter.applyTopInsets(view, getTopInset());
     }
 
     @Override
