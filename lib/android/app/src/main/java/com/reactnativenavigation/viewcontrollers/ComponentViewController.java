@@ -85,8 +85,8 @@ public class ComponentViewController extends ChildController<ComponentLayout> {
     }
 
     @Override
-    public void applyTopInsets() {
-        presenter.applyTopInsets(view, getTopInset());
+    public boolean applyTopInsets() {
+        return presenter.applyTopInsets(view, getTopInset());
     }
 
     @Override

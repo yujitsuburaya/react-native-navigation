@@ -101,7 +101,8 @@ class Options extends Component {
       options: {
         statusBar: {
           translucent: true,
-          drawBehind: true
+          drawBehind: true,
+          style: 'dark'
         },
         topBar: {
           drawBehind: true,

@@ -336,8 +336,8 @@ public abstract class ViewController<T extends ViewGroup> implements ViewTreeObs
         return false;
     }
 
-    public void applyTopInsets() {
-
+    public boolean applyTopInsets() {
+        return false;
     }
 
     int getTopInset() {

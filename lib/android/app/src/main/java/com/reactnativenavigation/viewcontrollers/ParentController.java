@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -168,8 +167,8 @@ public abstract class ParentController<T extends ViewGroup> extends ChildControl
     }
 
     @Override
-    public void applyTopInsets() {
-        getCurrentChild().applyTopInsets();
+    public boolean applyTopInsets() {
+        return getCurrentChild().applyTopInsets();
     }
 
     @Override
@@ -183,7 +182,6 @@ public abstract class ParentController<T extends ViewGroup> extends ChildControl
         if (!(child instanceof ParentController)) {
             int height = View.MeasureSpec.getSize(parentHeightMeasureSpec);
             height -= child.getBottomInsets();
-            Log.i("StackPresenter", child.getId() + " h: " + height + " bi: " + child.getBottomInsets());
             int spec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
             parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, spec, heightUsed);
             return true;

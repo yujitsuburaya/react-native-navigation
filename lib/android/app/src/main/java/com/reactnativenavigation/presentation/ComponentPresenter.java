@@ -32,10 +32,15 @@ public class ComponentPresenter {
         }
     }
 
-    public void applyTopInsets(View view, int topInsets) {
+    public boolean applyTopInsets(View view, int topInsets) {
         if (view != null) {
-            ((ViewGroup.MarginLayoutParams) view.getLayoutParams()).topMargin = topInsets;
-            view.requestLayout();
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            if (lp.topMargin != topInsets) {
+                lp.topMargin = topInsets;
+                view.requestLayout();
+                return true;
+            }
         }
+        return false;
     }
 }

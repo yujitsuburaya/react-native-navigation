@@ -3,11 +3,13 @@ package com.reactnativenavigation.viewcontrollers.sidemenu;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.LayoutParams;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.reactnativenavigation.parse.Options;
 import com.reactnativenavigation.parse.SideMenuOptions;
@@ -18,7 +20,8 @@ import com.reactnativenavigation.utils.CommandListener;
 import com.reactnativenavigation.viewcontrollers.ChildControllersRegistry;
 import com.reactnativenavigation.viewcontrollers.ParentController;
 import com.reactnativenavigation.viewcontrollers.ViewController;
-import com.reactnativenavigation.views.*;
+import com.reactnativenavigation.views.Component;
+import com.reactnativenavigation.views.SideMenu;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -104,22 +107,28 @@ public class SideMenuController extends ParentController<DrawerLayout> implement
         return options;
     }
 
-    //For onDrawerOpened and onDrawerClosed :
-    //Merge the options to the current state, if this happened due to a gesture we need to
-    //update the option state
-
     @Override
     public void onDrawerOpened(@NonNull View drawerView) {
         ViewController view = this.getMatchingView(drawerView);
-        view.mergeOptions(this.getOptionsWithVisability(this.viewIsLeft(drawerView), true));
+        view.mergeOptions(this.getOptionsWithVisibility(this.viewIsLeft(drawerView), true));
         view.onViewAppeared();
     }
 
     @Override
     public void onDrawerClosed(@NonNull View drawerView) {
         ViewController view = this.getMatchingView(drawerView);
-        view.mergeOptions(this.getOptionsWithVisability(this.viewIsLeft(drawerView), false));
+        view.mergeOptions(this.getOptionsWithVisibility(this.viewIsLeft(drawerView), false));
         view.onViewDisappear();
+    }
+
+    @Override
+    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+    }
+
+    @Override
+    public void onDrawerStateChanged(int newState) {
+
     }
 
     @Override
@@ -147,6 +156,17 @@ public class SideMenuController extends ParentController<DrawerLayout> implement
         getView().addView(controller.getView(), new LayoutParams(width, height, Gravity.RIGHT));
     }
 
+    @Override
+    public boolean onMeasureChild(CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        throw new RuntimeException("Perhaps I should always return true and measure myself");
+        ViewController controller = findController(child);
+        if (controller == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+        for (ViewController childController : getChildControllers()) {
+            presenter.onMeasureChild(parent, childController, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
+        }
+        return false;
+    }
+
     private int getWidth(SideMenuOptions sideMenuOptions) {
         int width = MATCH_PARENT;
         if (sideMenuOptions.width.hasValue()) {
@@ -171,7 +191,7 @@ public class SideMenuController extends ParentController<DrawerLayout> implement
         return (left != null && drawerView.equals(left.getView()));
     }
 
-    private Options getOptionsWithVisability ( boolean isLeft, boolean visible ) {
+    private Options getOptionsWithVisibility(boolean isLeft, boolean visible ) {
         Options options = new Options();
         if (isLeft) {
             options.sideMenuRootOptions.left.visible = new Bool(visible);
@@ -179,15 +199,5 @@ public class SideMenuController extends ParentController<DrawerLayout> implement
             options.sideMenuRootOptions.right.visible = new Bool(visible);
         }
         return options;
-    }
-
-    @Override
-    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
-    }
-
-    @Override
-    public void onDrawerStateChanged(int newState) {
-
     }
 }

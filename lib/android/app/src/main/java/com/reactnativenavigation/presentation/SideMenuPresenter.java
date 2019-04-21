@@ -1,10 +1,12 @@
 package com.reactnativenavigation.presentation;
 
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 
 import com.reactnativenavigation.parse.Options;
 import com.reactnativenavigation.parse.SideMenuRootOptions;
+import com.reactnativenavigation.viewcontrollers.ViewController;
 
 public class SideMenuPresenter {
 
@@ -74,6 +76,12 @@ public class SideMenuPresenter {
             sideMenu.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.RIGHT);
         } else if (options.right.enabled.isTrue()) {
             sideMenu.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.RIGHT);
+        }
+    }
+
+    public void onMeasureChild(CoordinatorLayout parent, ViewController child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+        if (child.applyTopInsets()) {
+            parent.onMeasureChild(child.getView(), parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
         }
     }
 }
