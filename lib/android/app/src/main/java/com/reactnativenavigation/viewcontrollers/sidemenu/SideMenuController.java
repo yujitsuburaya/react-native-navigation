@@ -158,7 +158,6 @@ public class SideMenuController extends ParentController<DrawerLayout> implement
 
     @Override
     public boolean onMeasureChild(CoordinatorLayout parent, ViewGroup child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
-        throw new RuntimeException("Perhaps I should always return true and measure myself");
         ViewController controller = findController(child);
         if (controller == null) return super.onMeasureChild(parent, child, parentWidthMeasureSpec, widthUsed, parentHeightMeasureSpec, heightUsed);
         for (ViewController childController : getChildControllers()) {
